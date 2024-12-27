@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Additional items", "Additio
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Host", "PlainDeck.Host\PlainDeck.Host.csproj", "{552BEE13-48DF-4CA9-A667-C2C99E97E5AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,5 +19,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{552BEE13-48DF-4CA9-A667-C2C99E97E5AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{552BEE13-48DF-4CA9-A667-C2C99E97E5AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{552BEE13-48DF-4CA9-A667-C2C99E97E5AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{552BEE13-48DF-4CA9-A667-C2C99E97E5AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
