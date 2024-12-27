@@ -10,7 +10,6 @@ foreach (var key in device.Keys)
 }
 
 device.OnKeyUp += (_, key) => SetRandomColor(device, key);
-device.OnKeyDown += (_, key) => SetRandomColor(device, key);
 
 await device.ListenAsync(CancellationToken.None);
 return;
