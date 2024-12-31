@@ -54,7 +54,15 @@ public sealed class Device
                         };
                     
                         keypadState[key] = updatedState;
-                        handler?.Invoke(this, key);
+
+                        try
+                        {
+                            handler?.Invoke(this, key);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
                     }
                 }
             }

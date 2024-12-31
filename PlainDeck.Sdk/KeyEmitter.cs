@@ -10,6 +10,8 @@ public static partial class KeyEmitter
         {
             var keyInfo = MapKeyWindows(key);
             SendKeyWindows(keyInfo, 0, 0x0001, 0);
+
+            return;
         }
 
         throw new NotSupportedException($"{nameof(KeyEmitter)} is not implemented for {Environment.OSVersion.Platform}.");
@@ -21,6 +23,8 @@ public static partial class KeyEmitter
         {
             var keyInfo = MapKeyWindows(key);
             SendKeyWindows(keyInfo, 0, 0x0002 | 0x0001, 0);
+
+            return;
         }
 
         throw new NotSupportedException($"{nameof(KeyEmitter)} is not implemented for {Environment.OSVersion.Platform}.");
