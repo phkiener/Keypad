@@ -62,6 +62,8 @@ public sealed class Device
     }
     
     public IEnumerable<DeviceKey> Keys => keypadState.Keys;
+    
+    public DeviceKey KeyAt(int row, int column) => configuration.GetKey(row, column);
 
     public async Task ListenAsync(CancellationToken cancellationToken)
     {
