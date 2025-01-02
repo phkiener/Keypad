@@ -27,6 +27,27 @@ public sealed class KeyConfiguration(DeviceKey deviceKey, Device device)
         return this;
     }
 
+    public KeyConfiguration BindKey(Action keyUp, Action? keyDown = null)
+    {
+        device.OnKeyDown += (_, pressedKey) =>
+        {
+            if (pressedKey == deviceKey)
+            {
+                keyUp.Invoke();
+            }
+        };
+
+        device.OnKeyUp += (_, pressedKey) =>
+        {
+            if (pressedKey == deviceKey)
+            {
+                keyDown?.Invoke();
+            }
+        };
+        
+        return this;
+    }
+
     public KeyConfiguration SetIcon([StringSyntax("XML")] string svg)
     {
         device.SetKey(deviceKey, svg);

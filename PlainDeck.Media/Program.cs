@@ -2,6 +2,9 @@
 
 var device = Device.Connect();
 
+var cancellation = new CancellationTokenSource();
+Console.CancelKeyPress += (_, _) => cancellation.Cancel();
+
 device.ConfigureKey(row: 0, column: 0)
     .BindKey(ConsoleKey.MediaPrevious)
     .SetIconFromResource("PlainDeck.Media.Resources.Ionicons.play-skip-back-circle-sharp.svg");
@@ -26,5 +29,11 @@ device.ConfigureKey(row: 0, column: 7)
     .BindKey(ConsoleKey.VolumeUp)
     .SetIconFromResource("PlainDeck.Media.Resources.Ionicons.volume-high-sharp.svg");
 
+device.ConfigureKey(row: 3, column: 7)
+    .BindKey(() => cancellation.Cancel())
+    .SetIconFromResource("PlainDeck.Media.Resources.Ionicons.exit-sharp.svg");
+
 device.SetBrightness(0.5);
-await device.ListenAsync(CancellationToken.None);
+await device.ListenAsync(cancellation.Token);
+
+device.SetBrightness(0);

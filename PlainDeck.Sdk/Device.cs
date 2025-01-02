@@ -87,8 +87,15 @@ public sealed class Device
         var buffer = new byte[messageSize];
         while (!cancellationToken.IsCancellationRequested)
         {
-            var bytesRead = await stream.ReadAsync(buffer, cancellationToken);
-            await messageChannel.Writer.WriteAsync(buffer[..bytesRead], cancellationToken);
+            try
+            {
+                var bytesRead = await stream.ReadAsync(buffer, cancellationToken);
+                await messageChannel.Writer.WriteAsync(buffer[..bytesRead], cancellationToken);
+            }
+            catch (TaskCanceledException)
+            {
+                break;
+            }
         }
 
         messageChannel.Writer.Complete();
