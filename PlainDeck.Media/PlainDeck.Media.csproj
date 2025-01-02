@@ -10,5 +10,9 @@
   <ItemGroup>
     <ProjectReference Include="..\PlainDeck.Sdk\PlainDeck.Sdk.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Resources/**/*.svg" />
+  </ItemGroup>
 
 </Project>

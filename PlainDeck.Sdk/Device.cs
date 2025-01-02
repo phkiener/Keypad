@@ -70,6 +70,8 @@ public sealed class Device
     }
     
     public IEnumerable<DeviceKey> Keys => keypadState.Keys;
+
+    public KeyConfiguration ConfigureKey(int row, int column) => new(configuration.GetKey(row, column), this);
     
     public DeviceKey KeyAt(int row, int column) => configuration.GetKey(row, column);
 
