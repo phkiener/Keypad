@@ -17,6 +17,7 @@ static async Task StartListening(DeviceType type)
     }
     
     device.MapKey(0, 0, new ProxyKeyHandler(ConsoleKey.A));
+    device.MapKey(0, 1, new BlinkingKey(TimeSpan.FromMilliseconds(250)));
 
     await device.ListenAsync(CancellationToken.None);
 }
