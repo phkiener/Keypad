@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Additional items", "Additio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.RandomColors", "PlainDeck.RandomColors\PlainDeck.RandomColors.csproj", "{552BEE13-48DF-4CA9-A667-C2C99E97E5AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Sdk", "PlainDeck.Sdk\PlainDeck.Sdk.csproj", "{0DA3F106-721B-4560-9396-D7A58C063483}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Sdk.V1", "PlainDeck.Sdk.V1\PlainDeck.Sdk.V1.csproj", "{0DA3F106-721B-4560-9396-D7A58C063483}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Sleep", "PlainDeck.Sleep\PlainDeck.Sleep.csproj", "{8B309C90-2860-48D8-A46C-F08E9F5F9A1E}"
 EndProject
