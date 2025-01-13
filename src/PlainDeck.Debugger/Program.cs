@@ -1,5 +1,6 @@
 using PlainDeck.Debugger;
 using PlainDeck.Sdk;
+using PlainDeck.Sdk.Extensions;
 
 var pedal = StartListening(DeviceType.StreamDeckPedal);
 var deck = StartListening(DeviceType.StreamDeckXL2022);
@@ -15,7 +16,7 @@ static async Task StartListening(DeviceType type)
         device.MapKey(key, new DebuggerKey(type));
     }
     
-    device.MapKey(0, 0, new BlinkingKey(TimeSpan.FromMilliseconds(250)));
+    device.MapKey(0, 0, new ProxyKeyHandler(ConsoleKey.A));
 
     await device.ListenAsync(CancellationToken.None);
 }
