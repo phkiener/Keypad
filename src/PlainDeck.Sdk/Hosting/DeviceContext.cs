@@ -3,7 +3,7 @@ using PlainDeck.Sdk.Hosting;
 
 namespace PlainDeck.Sdk;
 
-public sealed class DeviceContext(HidDevice device, DeviceConfiguration deviceConfiguration)
+public sealed class DeviceContext(HidDevice device, DeviceConfiguration deviceConfiguration) : IDeviceContext
 {
     public DeviceConfiguration Device { get; } = deviceConfiguration;
 

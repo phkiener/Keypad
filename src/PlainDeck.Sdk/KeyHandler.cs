@@ -6,17 +6,17 @@ public abstract class KeyHandler
 {
     public DeviceKey Key { get; internal set; }
     
-    public virtual Task OnBind(DeviceContext context)
+    public virtual Task OnBind(IDeviceContext context)
     {
         return Task.CompletedTask;
     }
     
-    public virtual Task OnKeyDown(DeviceContext context)
+    public virtual Task OnKeyDown(IDeviceContext context)
     {
         return Task.CompletedTask;
     }
     
-    public virtual Task OnKeyUp(DeviceContext context)
+    public virtual Task OnKeyUp(IDeviceContext context)
     {
         return Task.CompletedTask;
     }

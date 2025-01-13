@@ -9,18 +9,37 @@ public readonly record struct DeviceKey(int Row, int Column, byte Id);
 
 public enum ButtonState { Unknown = 0, Down = 1, Up = -1 }
 
-public sealed partial class DeviceHost(HidDevice device, DeviceConfiguration configuration)
+public sealed partial class DeviceHost
 {
+    private readonly HidDevice device;
+    private readonly DeviceConfiguration configuration;
+    private readonly DeviceContext context;
     private readonly Channel<DeviceMessage> messageChannel = Channel.CreateUnbounded<DeviceMessage>();
-    
+
+    public DeviceHost(HidDevice device, DeviceConfiguration configuration)
+    {
+        this.device = device;
+        this.configuration = configuration;
+
+        context = new DeviceContext(device, configuration);
+        foreach (var key in configuration.Keys)
+        {
+            keyState.Add(key, ButtonState.Unknown);
+        }
+    }
+
     public async Task ListenAsync(CancellationToken cancellationToken = default)
     {
         await using var stream = device.Open();
         stream.ReadTimeout = Timeout.Infinite;
 
-        var context = await InitializeContextAsync();
-        _ = ProcessMessagesAsync(context, cancellationToken);
+        _ = ProcessMessagesAsync(cancellationToken);
 
+        foreach (var handler in keyHandlers.Values)
+        {
+            await handler.OnBind(context).ConfigureAwait(false);
+        }
+        
         var incomingMessage = new byte[1024];
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -33,24 +52,7 @@ public sealed partial class DeviceHost(HidDevice device, DeviceConfiguration con
         messageChannel.Writer.Complete();
     }
 
-    private async Task<DeviceContext> InitializeContextAsync()
-    {
-        var context = new DeviceContext(device, configuration);
-        
-        foreach (var key in configuration.Keys)
-        {
-            keyState.Add(key, ButtonState.Unknown);
-        }
-
-        foreach (var handler in keyHandlers.Values)
-        {
-            await handler.OnBind(context).ConfigureAwait(false);
-        }
-
-        return context;
-    }
-
-    private async Task ProcessMessagesAsync(DeviceContext context, CancellationToken cancellationToken)
+    private async Task ProcessMessagesAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -89,13 +91,13 @@ public sealed partial class DeviceHost(HidDevice device, DeviceConfiguration con
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception e) when (e is not (TaskCanceledException or OperationCanceledException))
                 {
                     Console.WriteLine($"[ERROR] Unhandled exception: {e.Message}");
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception e) when (e is not (TaskCanceledException or OperationCanceledException))
         {
             Console.WriteLine($"[FATAL] Unhandled exception: {e.Message}");
         }

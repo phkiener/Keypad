@@ -5,11 +5,14 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>PlainDeck.Host</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PlainDeck.Sdk.V1\PlainDeck.Sdk.V1.csproj" />
+    <ProjectReference Include="..\PlainDeck.Sdk\PlainDeck.Sdk.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Resources/**/*.svg" />
   </ItemGroup>
 
 </Project>

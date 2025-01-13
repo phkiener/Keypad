@@ -8,7 +8,7 @@ namespace PlainDeck.Sdk.Extensions;
 
 public static class SvgExtensions
 {
-    public static void SetKeyImage(this DeviceContext context, DeviceKey key, [StringSyntax("XML")] string svg)
+    public static void SetKeyImage(this IDeviceContext context, DeviceKey key, [StringSyntax("XML")] string svg)
     {
         if (!context.Device.HasKeyImage)
         {

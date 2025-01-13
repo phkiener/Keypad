@@ -8,7 +8,7 @@ public sealed class BlinkingKey(TimeSpan interval) : KeyHandler
 {
     private PeriodicTimer? timer;
 
-    public override Task OnBind(DeviceContext context)
+    public override Task OnBind(IDeviceContext context)
     {
         timer = new PeriodicTimer(interval);
         _ = Blink(Key, context);
@@ -16,7 +16,7 @@ public sealed class BlinkingKey(TimeSpan interval) : KeyHandler
         return Task.CompletedTask;
     }
 
-    private async Task Blink(DeviceKey key, DeviceContext context)
+    private async Task Blink(DeviceKey key, IDeviceContext context)
     {
         var on = true;
         while (timer is not null)
