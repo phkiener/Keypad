@@ -68,9 +68,7 @@ public sealed partial class ProxyKeyHandler
 
     private static partial class MacOS
     {
-        public const ushort NX_KEYTYPE_PLAY = 16;
         public const ushort NX_KEYTYPE_NEXT = 17;
-        public const ushort NX_KEYTYPE_PREVIOUS = 18;
         public const int kCGEventSourceStateHIDSystemState = 1;
         public const uint KeyDown = 10 << 8;
         public const uint KeyUp = 11 << 8;
@@ -144,13 +142,13 @@ public sealed partial class ProxyKeyHandler
         public static partial IntPtr CGEventCreate(IntPtr source);
         
         [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
-        public static partial IntPtr CGEventSetType(IntPtr @event, uint eventType);
+        public static partial void CGEventSetType(IntPtr @event, uint eventType);
         
         [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
-        public static partial IntPtr CGEventSetFlags(IntPtr @event, ulong flags);
+        public static partial void CGEventSetFlags(IntPtr @event, ulong flags);
         
         [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
-        public static partial IntPtr CGEventSetIntegerValueField(IntPtr @event, uint feld, long value);
+        public static partial void CGEventSetIntegerValueField(IntPtr @event, uint feld, long value);
         
         [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
         public static partial IntPtr CGEventCreateKeyboardEvent(IntPtr source, ushort virtualKey, [MarshalAs(UnmanagedType.Bool)] bool keyDown);
