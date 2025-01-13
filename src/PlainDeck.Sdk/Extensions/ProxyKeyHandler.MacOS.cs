@@ -8,6 +8,24 @@ public sealed partial class ProxyKeyHandler
     private static Task KeyDown_MacOS(ConsoleKey key)
     {
         Debug.Assert(OperatingSystem.IsMacOS());
+        
+        // what the fuck
+        if (key is ConsoleKey.MediaNext)
+        {
+            var source = MacOS.CGEventSourceCreate(MacOS.kCGEventSourceStateHIDSystemState);
+            var eventRef = MacOS.CGEventCreate(source);
+            
+            MacOS.CGEventSetType(eventRef, 14);
+            MacOS.CGEventSetFlags(eventRef, MacOS.KeyDown);
+            MacOS.CGEventSetIntegerValueField(eventRef, 0x53, 8);
+            MacOS.CGEventSetIntegerValueField(eventRef, 0x95, MacOS.KeyDown | (MacOS.NX_KEYTYPE_NEXT << 16));
+            MacOS.CGEventSetIntegerValueField(eventRef, 0x96, -1);
+
+            MacOS.CGEventPost(0, eventRef);
+            MacOS.CFRelease(eventRef);
+
+            return Task.CompletedTask;
+        }
 
         var keyCode = MacOS.MapKey(key);
         var keyboardEvent = MacOS.CGEventCreateKeyboardEvent(source: IntPtr.Zero, virtualKey: keyCode, keyDown: true);
@@ -22,6 +40,23 @@ public sealed partial class ProxyKeyHandler
     {
         Debug.Assert(OperatingSystem.IsMacOS());
 
+        if (key is ConsoleKey.MediaNext)
+        {
+            var source = MacOS.CGEventSourceCreate(MacOS.kCGEventSourceStateHIDSystemState);
+            var eventRef = MacOS.CGEventCreate(source);
+            
+            MacOS.CGEventSetType(eventRef, 14);
+            MacOS.CGEventSetFlags(eventRef, MacOS.KeyUp);
+            MacOS.CGEventSetIntegerValueField(eventRef, 0x53, 8);
+            MacOS.CGEventSetIntegerValueField(eventRef, 0x95, MacOS.KeyUp | (MacOS.NX_KEYTYPE_NEXT << 16));
+            MacOS.CGEventSetIntegerValueField(eventRef, 0x96, -1);
+
+            MacOS.CGEventPost(0, eventRef);
+            MacOS.CFRelease(eventRef);
+
+            return Task.CompletedTask;
+        }
+
         var keyCode = MacOS.MapKey(key);
         var keyboardEvent = MacOS.CGEventCreateKeyboardEvent(source: IntPtr.Zero, virtualKey: keyCode, keyDown: false);
 
@@ -33,6 +68,13 @@ public sealed partial class ProxyKeyHandler
 
     private static partial class MacOS
     {
+        public const ushort NX_KEYTYPE_PLAY = 16;
+        public const ushort NX_KEYTYPE_NEXT = 17;
+        public const ushort NX_KEYTYPE_PREVIOUS = 18;
+        public const int kCGEventSourceStateHIDSystemState = 1;
+        public const uint KeyDown = 10 << 8;
+        public const uint KeyUp = 11 << 8;
+
         public static ushort MapKey(ConsoleKey key)
         {
             return key switch
@@ -94,6 +136,21 @@ public sealed partial class ProxyKeyHandler
                 _ => throw new NotSupportedException($"Key {key} not supported")
             };
         }
+        
+        [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+        public static partial IntPtr CGEventSourceCreate(int stateID);
+        
+        [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+        public static partial IntPtr CGEventCreate(IntPtr source);
+        
+        [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+        public static partial IntPtr CGEventSetType(IntPtr @event, uint eventType);
+        
+        [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+        public static partial IntPtr CGEventSetFlags(IntPtr @event, ulong flags);
+        
+        [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+        public static partial IntPtr CGEventSetIntegerValueField(IntPtr @event, uint feld, long value);
         
         [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
         public static partial IntPtr CGEventCreateKeyboardEvent(IntPtr source, ushort virtualKey, [MarshalAs(UnmanagedType.Bool)] bool keyDown);
