@@ -9,30 +9,17 @@ public readonly record struct DeviceKey(int Row, int Column, byte Id);
 
 public enum ButtonState { Unknown = 0, Down = 1, Up = -1 }
 
-public sealed class DeviceHost(HidDevice device, DeviceConfiguration configuration)
+public sealed partial class DeviceHost(HidDevice device, DeviceConfiguration configuration)
 {
     private readonly Channel<DeviceMessage> messageChannel = Channel.CreateUnbounded<DeviceMessage>();
-    private readonly Dictionary<DeviceKey, KeyHandler> keyHandlers = new();
-    private readonly Dictionary<DeviceKey, ButtonState> keyState = new();
     
     public async Task ListenAsync(CancellationToken cancellationToken = default)
     {
         await using var stream = device.Open();
         stream.ReadTimeout = Timeout.Infinite;
 
-        foreach (var key in configuration.Keys)
-        {
-            keyState.Add(key, ButtonState.Unknown);
-        }
-
-        var context = new DeviceContext(device, configuration);
-        
+        var context = await InitializeContextAsync();
         _ = ProcessMessagesAsync(context, cancellationToken);
-        
-        foreach (var handler in keyHandlers.Values)
-        {
-            await handler.OnBind(context).ConfigureAwait(false);
-        }
 
         var incomingMessage = new byte[1024];
         while (!cancellationToken.IsCancellationRequested)
@@ -46,18 +33,22 @@ public sealed class DeviceHost(HidDevice device, DeviceConfiguration configurati
         messageChannel.Writer.Complete();
     }
 
-    public void MapKey(int row, int column, KeyHandler handler)
+    private async Task<DeviceContext> InitializeContextAsync()
     {
-        var key = configuration.GetKey(row, column);
-        MapKey(key, handler);
-    }
+        var context = new DeviceContext(device, configuration);
+        
+        foreach (var key in configuration.Keys)
+        {
+            keyState.Add(key, ButtonState.Unknown);
+        }
 
-    public void MapKey(DeviceKey key, KeyHandler handler)
-    {
-        keyHandlers[key] = handler;
-    }
+        foreach (var handler in keyHandlers.Values)
+        {
+            await handler.OnBind(context).ConfigureAwait(false);
+        }
 
-    public IEnumerable<DeviceKey> Keys => configuration.Keys;
+        return context;
+    }
 
     private async Task ProcessMessagesAsync(DeviceContext context, CancellationToken cancellationToken)
     {

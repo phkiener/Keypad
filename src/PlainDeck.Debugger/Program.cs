@@ -12,7 +12,7 @@ static async Task StartListening(DeviceType type)
     var device = Device.Connect(type);
     foreach (var key in device.Keys)
     {
-        device.MapKey(key, new DebuggerKey(type, key));
+        device.MapKey(key, new DebuggerKey(type));
     }
 
     await device.ListenAsync(CancellationToken.None);

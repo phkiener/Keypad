@@ -1,7 +1,11 @@
+using PlainDeck.Sdk.Hosting;
+
 namespace PlainDeck.Sdk;
 
 public abstract class KeyHandler
 {
+    public DeviceKey Key { get; internal set; }
+    
     public virtual Task OnBind(DeviceContext context)
     {
         return Task.CompletedTask;
