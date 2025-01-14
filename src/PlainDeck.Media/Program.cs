@@ -12,7 +12,7 @@ device.MapKey(0, 2, new ProxyKeyHandler(ConsoleKey.MediaNext).WithSvgFrom("Plain
 device.MapKey(0, 5, new ProxyKeyHandler(ConsoleKey.VolumeMute).WithSvgFrom("PlainDeck.Media.Resources.Ionicons.volume-mute-sharp.svg"));
 device.MapKey(0, 6, new ProxyKeyHandler(ConsoleKey.VolumeDown).WithSvgFrom("PlainDeck.Media.Resources.Ionicons.volume-low-sharp.svg"));
 device.MapKey(0, 7, new ProxyKeyHandler(ConsoleKey.VolumeUp).WithSvgFrom("PlainDeck.Media.Resources.Ionicons.volume-high-sharp.svg"));
-device.MapKey(3, 7, new ProxyKeyHandler(ConsoleKey.Escape).WithSvgFrom("PlainDeck.Media.Resources.Ionicons.exit-sharp.svg"));
+device.MapKey(3, 7, new ProxyKeyHandler(ConsoleKey.A).WithSvgFrom("PlainDeck.Media.Resources.Ionicons.exit-sharp.svg"));
 
 device.SetBrightness(0.5);
 await device.ListenAsync(cancellation.Token);

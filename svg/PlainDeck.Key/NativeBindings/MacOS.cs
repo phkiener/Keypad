@@ -22,7 +22,7 @@ internal static partial class MacOS
     public static partial void CGEventSetFlags(IntPtr @event, ulong flags);
         
     [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
-    public static partial void CGEventSetIntegerValueField(IntPtr @event, uint feld, long value);
+    public static partial void CGEventSetIntegerValueField(IntPtr @event, uint field, long value);
         
     [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
     public static partial IntPtr CGEventCreateKeyboardEvent(IntPtr source, ushort virtualKey, [MarshalAs(UnmanagedType.Bool)] bool keyDown);
@@ -32,4 +32,14 @@ internal static partial class MacOS
     
     [LibraryImport("/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation")]
     public static partial void CFRelease(IntPtr cf);
+    
+    // -- DEBUG
+    [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+    public static partial uint CGEventGetType(IntPtr @event);
+        
+    [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+    public static partial ulong CGEventGetFlags(IntPtr @event);
+        
+    [LibraryImport("/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics")]
+    public static partial long CGEventGetIntegerValueField(IntPtr @event, uint field);
 }

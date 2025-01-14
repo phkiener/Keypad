@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using PlainDeck.Sdk;
 
 namespace PlainDeck.Svg;
 
@@ -8,13 +7,11 @@ public static class KeyHandlerExtensions
 {
     public static T WithImage<T>(this T handler, [StringSyntax("XML")] string svg) where T : KeyHandler
     {
-        var imageData = ImageConverter.SvgToJpeg(
+        return handler.WithImage(() => ImageConverter.SvgToJpeg(
             svg: svg,
             width: handler.Configuration.KeyImageWidth,
             height: handler.Configuration.KeyImageHeight,
-            doFlip: handler.Configuration.KeyImageFlip);
-
-        return handler.WithImage(imageData);
+            doFlip: handler.Configuration.KeyImageFlip));
     }
     
     public static T WithSvgFrom<T>(this T handler, string resourcePath) where T : KeyHandler

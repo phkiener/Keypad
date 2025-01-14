@@ -23,12 +23,16 @@ public static partial class KeyPress
 
             MacOS.CGEventPost(0, eventRef);
             MacOS.CFRelease(eventRef);
+            MacOS.CFRelease(source);
 
             return;
         }
 
         var keyCode = KeyCode.Map(key);
         var keyboardEvent = MacOS.CGEventCreateKeyboardEvent(source: IntPtr.Zero, virtualKey: keyCode, keyDown: true);
+
+        var flags = MacOS.CGEventGetFlags(keyboardEvent);
+        var type = MacOS.CGEventGetType(keyboardEvent);
 
         MacOS.CGEventPost(0, keyboardEvent);
         MacOS.CFRelease(keyboardEvent);
@@ -51,6 +55,7 @@ public static partial class KeyPress
 
             MacOS.CGEventPost(0, eventRef);
             MacOS.CFRelease(eventRef);
+            MacOS.CFRelease(source);
 
             return;
         }

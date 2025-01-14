@@ -4,11 +4,11 @@ namespace PlainDeck;
 
 public abstract class KeyHandler
 {
-    private byte[]? initialImageData;
+    private Func<byte[]>? initialImageProvider;
 
-    internal void SetInitialImageData(byte[] imageData)
+    internal void SetInitialImageData(Func<byte[]> imageProvider)
     {
-        initialImageData = imageData;
+        initialImageProvider = imageProvider;
     }
     
     public DeviceKey Key { get; internal set; }
@@ -16,9 +16,9 @@ public abstract class KeyHandler
     
     public virtual Task OnBind(IDeviceContext context)
     {
-        if (initialImageData is not null)
+        if (initialImageProvider is not null)
         {
-            context.SetKeyImage(Key, initialImageData);
+            context.SetKeyImage(Key, initialImageProvider());
         }
 
         return Task.CompletedTask;
@@ -39,7 +39,12 @@ public static class KeyHandlerExtensions
 {
     public static T WithImage<T>(this T handler, byte[] imageData) where T : KeyHandler
     {
-        handler.SetInitialImageData(imageData);
+        return handler.WithImage(() => imageData);
+    }
+    
+    public static T WithImage<T>(this T handler, Func<byte[]> imageDataProvider) where T : KeyHandler
+    {
+        handler.SetInitialImageData(imageDataProvider);
         return handler;
     }
 }
