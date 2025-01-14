@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Debugger", "src\P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Svg", "src\PlainDeck.Svg\PlainDeck.Svg.csproj", "{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Key", "svg\PlainDeck.Key\PlainDeck.Key.csproj", "{46F12E0A-4C7C-4EF7-A6FC-1D89998957C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46F12E0A-4C7C-4EF7-A6FC-1D89998957C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F12E0A-4C7C-4EF7-A6FC-1D89998957C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F12E0A-4C7C-4EF7-A6FC-1D89998957C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F12E0A-4C7C-4EF7-A6FC-1D89998957C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8B309C90-2860-48D8-A46C-F08E9F5F9A1E} = {F0A456B8-2133-4C49-9A95-FC14FE8BEDF5}

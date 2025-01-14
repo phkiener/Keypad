@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace PlainDeck.Extensions;
 
-public sealed partial class ProxyKeyHandler
+public static partial class KeyPress
 {
-    private static Task KeyDown_MacOS(ConsoleKey key)
+    private static void KeyDown_MacOS(ConsoleKey key)
     {
         Debug.Assert(OperatingSystem.IsMacOS());
         
@@ -24,7 +24,7 @@ public sealed partial class ProxyKeyHandler
             MacOS.CGEventPost(0, eventRef);
             MacOS.CFRelease(eventRef);
 
-            return Task.CompletedTask;
+            return;
         }
 
         var keyCode = MacOS.MapKey(key);
@@ -32,11 +32,9 @@ public sealed partial class ProxyKeyHandler
 
         MacOS.CGEventPost(0, keyboardEvent);
         MacOS.CFRelease(keyboardEvent);
-
-        return Task.CompletedTask;
     }
     
-    private static Task KeyUp_MacOS(ConsoleKey key)
+    private static void KeyUp_MacOS(ConsoleKey key)
     {
         Debug.Assert(OperatingSystem.IsMacOS());
 
@@ -54,7 +52,7 @@ public sealed partial class ProxyKeyHandler
             MacOS.CGEventPost(0, eventRef);
             MacOS.CFRelease(eventRef);
 
-            return Task.CompletedTask;
+            return;
         }
 
         var keyCode = MacOS.MapKey(key);
@@ -62,8 +60,6 @@ public sealed partial class ProxyKeyHandler
 
         MacOS.CGEventPost(0, keyboardEvent);
         MacOS.CFRelease(keyboardEvent);
-        
-        return Task.CompletedTask;
     }
 
     private static partial class MacOS

@@ -3,26 +3,22 @@ using System.Runtime.InteropServices;
 
 namespace PlainDeck.Extensions;
 
-public sealed partial class ProxyKeyHandler
+public static partial class KeyPress
 {
-    private static Task KeyDown_Windows(ConsoleKey key)
+    private static void KeyDown_Windows(ConsoleKey key)
     {
         Debug.Assert(OperatingSystem.IsWindows());
 
         var keyCode = (byte)key;
         Windows.KeybdEvent(keyCode, 0, Windows.KeyEventF_ExtendedKey, IntPtr.Zero);
-        
-        return Task.CompletedTask;
     }
     
-    private static Task KeyUp_Windows(ConsoleKey key)
+    private static void KeyUp_Windows(ConsoleKey key)
     {
         Debug.Assert(OperatingSystem.IsWindows());
 
         var keyCode = (byte)key;
         Windows.KeybdEvent(keyCode, 0, Windows.KeyEventF_KeyUp | Windows.KeyEventF_ExtendedKey, IntPtr.Zero);
-        
-        return Task.CompletedTask;
     }
 
     private static partial class Windows

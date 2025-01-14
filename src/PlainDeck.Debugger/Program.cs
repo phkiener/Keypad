@@ -1,6 +1,6 @@
 using PlainDeck;
 using PlainDeck.Debugger;
-using ProxyKeyHandler = PlainDeck.Extensions.ProxyKeyHandler;
+using PlainDeck.Extensions;
 
 var pedal = StartListening(DeviceType.StreamDeckPedal);
 var deck = StartListening(DeviceType.StreamDeckXL2022);

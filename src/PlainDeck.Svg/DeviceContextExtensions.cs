@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using PlainDeck.Hosting;
-using PlainDeck.Sdk;
 
 namespace PlainDeck.Svg;
 
