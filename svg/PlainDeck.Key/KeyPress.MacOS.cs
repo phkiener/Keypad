@@ -15,11 +15,11 @@ public static partial class KeyPress
             var source = MacOS.CGEventSourceCreate(MacOS.kCGEventSourceStateHIDSystemState);
             var eventRef = MacOS.CGEventCreate(source);
             
-            MacOS.CGEventSetType(eventRef, 14);
-            MacOS.CGEventSetFlags(eventRef, MacOS.KeyDown);
-            MacOS.CGEventSetIntegerValueField(eventRef, 0x53, 8);
-            MacOS.CGEventSetIntegerValueField(eventRef, 0x95, MacOS.KeyDown | (MacOS.NX_KEYTYPE_NEXT << 16));
-            MacOS.CGEventSetIntegerValueField(eventRef, 0x96, -1);
+            MacOS.CGEventSetType(eventRef, MacOS.NX_SYSDEFINED);
+            MacOS.CGEventSetFlags(eventRef, MacOS.KeyDown); // Actually wrong, maybe 1 << 10 resp. 1 << 11?
+            MacOS.CGEventSetIntegerValueField(eventRef, 83, 8); // Subtype?
+            MacOS.CGEventSetIntegerValueField(eventRef, 149, MacOS.KeyDown | (MacOS.NX_KEYTYPE_NEXT << 16));
+            MacOS.CGEventSetIntegerValueField(eventRef, 150, -1);
 
             MacOS.CGEventPost(0, eventRef);
             MacOS.CFRelease(eventRef);

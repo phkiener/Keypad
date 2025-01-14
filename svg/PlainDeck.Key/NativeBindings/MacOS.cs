@@ -4,6 +4,7 @@ namespace PlainDeck.Extensions.NativeBindings;
 
 internal static partial class MacOS
 {
+    public const int NX_SYSDEFINED = 14;
     public const ushort NX_KEYTYPE_NEXT = 17;
     public const int kCGEventSourceStateHIDSystemState = 1;
     public const uint KeyDown = 10 << 8;
