@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using PlainDeck.Extensions.NativeBindings;
 
 namespace PlainDeck.Extensions;
 
@@ -9,7 +9,7 @@ public static partial class KeyPress
     {
         Debug.Assert(OperatingSystem.IsWindows());
 
-        var keyCode = (byte)key;
+        var keyCode = KeyCode.Map(key);
         Windows.KeybdEvent(keyCode, 0, Windows.KeyEventF_ExtendedKey, IntPtr.Zero);
     }
     
@@ -17,16 +17,15 @@ public static partial class KeyPress
     {
         Debug.Assert(OperatingSystem.IsWindows());
 
-        var keyCode = (byte)key;
+        var keyCode = KeyCode.Map(key);
         Windows.KeybdEvent(keyCode, 0, Windows.KeyEventF_KeyUp | Windows.KeyEventF_ExtendedKey, IntPtr.Zero);
     }
+}
 
-    private static partial class Windows
+file static class KeyCode
+{
+    public static byte Map(ConsoleKey key)
     {
-        public const uint KeyEventF_ExtendedKey = 0x0001;
-        public const uint KeyEventF_KeyUp = 0x0002;
-        
-        [LibraryImport("user32.dll", EntryPoint = "keybd_event")]
-        public static partial void KeybdEvent(byte bVk, byte bScan, uint dwFlags, IntPtr dwExtraInfo);
+        return (byte)key; // seems to match
     }
 }
