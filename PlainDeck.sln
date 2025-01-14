@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Media", "src\Plai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Debugger", "src\PlainDeck.Debugger\PlainDeck.Debugger.csproj", "{58915C78-A928-4F03-A75F-A0112FF476C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlainDeck.Sdk.Svg", "src\PlainDeck.Sdk.Svg\PlainDeck.Sdk.Svg.csproj", "{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{58915C78-A928-4F03-A75F-A0112FF476C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58915C78-A928-4F03-A75F-A0112FF476C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58915C78-A928-4F03-A75F-A0112FF476C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCDF43D1-A4EF-44F3-BD8D-7FE5F58F8F3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8B309C90-2860-48D8-A46C-F08E9F5F9A1E} = {F0A456B8-2133-4C49-9A95-FC14FE8BEDF5}

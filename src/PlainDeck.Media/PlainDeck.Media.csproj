@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PlainDeck.Sdk\PlainDeck.Sdk.csproj" />
+    <ProjectReference Include="..\PlainDeck.Sdk.Svg\PlainDeck.Sdk.Svg.csproj" />
   </ItemGroup>
   
   <ItemGroup>

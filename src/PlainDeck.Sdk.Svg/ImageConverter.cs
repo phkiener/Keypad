@@ -1,25 +1,12 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Xml;
-using PlainDeck.Sdk.Hosting;
 using SkiaSharp;
 using Svg.Skia;
 
-namespace PlainDeck.Sdk.Extensions;
+namespace PlainDeck.Sdk.Svg;
 
-public static class SvgExtensions
+public static class ImageConverter
 {
-    public static void SetKeyImage(this IDeviceContext context, DeviceKey key, [StringSyntax("XML")] string svg)
-    {
-        if (!context.Device.HasKeyImage)
-        {
-            return;
-        }
-        
-        var imageData = SvgToJpeg(svg, context.Device.KeyImageWidth, context.Device.KeyImageHeight, context.Device.KeyImageFlip);
-        context.SetKeyImage(key, imageData);
-    }
-    
-    private static byte[] SvgToJpeg(string svg, int width, int height, bool doFlip)
+    public static byte[] SvgToJpeg(string svg, int width, int height, bool doFlip)
     {
         using var bitmap = GetBitmap(svg, width, height);
         using var flippedBitmap = doFlip ? Flip(bitmap) : bitmap;

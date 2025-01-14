@@ -1,6 +1,7 @@
 using PlainDeck.Sdk;
 using PlainDeck.Sdk.Extensions;
 using PlainDeck.Sdk.Hosting;
+using PlainDeck.Sdk.Svg;
 
 namespace PlainDeck.Debugger;
 

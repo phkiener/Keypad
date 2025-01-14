@@ -16,6 +16,7 @@ public sealed partial class DeviceHost
         keyHandlers[key] = handler;
 
         handler.Key = key;
+        handler.Configuration = configuration;
     }
 
     public IEnumerable<DeviceKey> Keys => configuration.Keys;

@@ -1,5 +1,6 @@
 ﻿using PlainDeck.Sdk;
 using PlainDeck.Sdk.Extensions;
+using PlainDeck.Sdk.Svg;
 
 var device = Device.Connect(DeviceType.StreamDeckXL2022);
 device.SetBrightness(1);
