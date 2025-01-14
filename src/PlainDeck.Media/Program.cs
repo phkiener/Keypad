@@ -1,6 +1,6 @@
-﻿using PlainDeck.Sdk;
-using PlainDeck.Sdk.Extensions;
-using PlainDeck.Sdk.Svg;
+﻿using PlainDeck;
+using PlainDeck.Svg;
+using ProxyKeyHandler = PlainDeck.Extensions.ProxyKeyHandler;
 
 var cancellation = new CancellationTokenSource();
 Console.CancelKeyPress += (_, _) => cancellation.Cancel();

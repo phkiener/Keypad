@@ -1,4 +1,4 @@
-namespace PlainDeck.Sdk.Hosting;
+namespace PlainDeck.Hosting;
 
 public sealed partial class DeviceHost : IDeviceContext
 {

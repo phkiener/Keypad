@@ -1,6 +1,5 @@
-﻿using PlainDeck.Sdk;
-using PlainDeck.Sdk.Extensions;
-using PlainDeck.Sdk.Svg;
+﻿using PlainDeck;
+using PlainDeck.Svg;
 
 var device = Device.Connect(DeviceType.StreamDeckXL2022);
 foreach (var key in device.Keys)

@@ -1,7 +1,6 @@
 using HidSharp;
-using PlainDeck.Sdk.Hosting;
 
-namespace PlainDeck.Sdk;
+namespace PlainDeck.Hosting;
 
 public sealed class DeviceContext(HidDevice device, DeviceConfiguration deviceConfiguration) : IDeviceContext
 {

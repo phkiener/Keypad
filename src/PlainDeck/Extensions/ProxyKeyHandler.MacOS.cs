@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace PlainDeck.Sdk.Extensions;
+namespace PlainDeck.Extensions;
 
 public sealed partial class ProxyKeyHandler
 {

@@ -1,6 +1,6 @@
-using PlainDeck.Sdk.Hosting;
+using PlainDeck.Hosting;
 
-namespace PlainDeck.Sdk;
+namespace PlainDeck;
 
 public interface IDeviceContext
 {

@@ -1,7 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using PlainDeck.Sdk;
 
-namespace PlainDeck.Sdk.Svg;
+namespace PlainDeck.Svg;
 
 public static class KeyHandlerExtensions
 {

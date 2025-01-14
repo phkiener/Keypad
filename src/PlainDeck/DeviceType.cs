@@ -1,4 +1,4 @@
-namespace PlainDeck.Sdk;
+namespace PlainDeck;
 
 public enum DeviceType
 {

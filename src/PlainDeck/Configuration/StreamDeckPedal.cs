@@ -1,4 +1,4 @@
-namespace PlainDeck.Sdk.Configuration;
+namespace PlainDeck.Configuration;
 
 public sealed class StreamDeckPedal : DeviceConfiguration
 {

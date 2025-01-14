@@ -11,7 +11,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\PlainDeck.Sdk\PlainDeck.Sdk.csproj" />
+    <ProjectReference Include="..\PlainDeck\PlainDeck.csproj" />
   </ItemGroup>
 
 </Project>

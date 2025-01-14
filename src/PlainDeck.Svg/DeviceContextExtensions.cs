@@ -1,7 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using PlainDeck.Sdk.Hosting;
+using PlainDeck.Hosting;
+using PlainDeck.Sdk;
 
-namespace PlainDeck.Sdk.Svg;
+namespace PlainDeck.Svg;
 
 public static class SvgExtensions
 {

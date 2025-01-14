@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PlainDeck.Sdk\PlainDeck.Sdk.csproj" />
-    <ProjectReference Include="..\PlainDeck.Sdk.Svg\PlainDeck.Sdk.Svg.csproj" />
+    <ProjectReference Include="..\PlainDeck\PlainDeck.csproj" />
+    <ProjectReference Include="..\PlainDeck.Svg\PlainDeck.Svg.csproj" />
   </ItemGroup>
   
   <ItemGroup>

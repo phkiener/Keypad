@@ -1,6 +1,4 @@
-using PlainDeck.Sdk;
-using PlainDeck.Sdk.Extensions;
-using PlainDeck.Sdk.Svg;
+using PlainDeck.Svg;
 
 namespace PlainDeck.Debugger;
 

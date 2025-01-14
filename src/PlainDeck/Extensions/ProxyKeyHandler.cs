@@ -1,4 +1,4 @@
-namespace PlainDeck.Sdk.Extensions;
+namespace PlainDeck.Extensions;
 
 public partial class ProxyKeyHandler(ConsoleKey key) : KeyHandler
 {

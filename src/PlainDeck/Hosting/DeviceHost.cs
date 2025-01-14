@@ -1,7 +1,7 @@
 using System.Threading.Channels;
 using HidSharp;
 
-namespace PlainDeck.Sdk.Hosting;
+namespace PlainDeck.Hosting;
 
 public readonly record struct DeviceMessage(byte[] Payload);
 

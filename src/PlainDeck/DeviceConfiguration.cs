@@ -1,7 +1,7 @@
-using PlainDeck.Sdk.Configuration;
-using PlainDeck.Sdk.Hosting;
+using PlainDeck.Configuration;
+using PlainDeck.Hosting;
 
-namespace PlainDeck.Sdk;
+namespace PlainDeck;
 
 public abstract class DeviceConfiguration
 {

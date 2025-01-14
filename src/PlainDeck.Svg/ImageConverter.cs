@@ -2,7 +2,7 @@ using System.Xml;
 using SkiaSharp;
 using Svg.Skia;
 
-namespace PlainDeck.Sdk.Svg;
+namespace PlainDeck.Svg;
 
 public static class ImageConverter
 {
