@@ -1,4 +1,5 @@
 using PlainDeck.Extensions;
+using PlainDeck.Hosting;
 using PlainDeck.Svg;
 
 namespace Keypad;
@@ -21,6 +22,11 @@ public sealed class KeyHandler : ProxyKeyHandler
                 </svg>
                 """);
         }
+    }
+
+    public static void Map(DeviceHost device, KeyConfiguration key)
+    {
+        device.MapKey(key.Row, key.Column, new ProxyKeyHandler(TranslateKey(key.Key)));
     }
 
     private static ConsoleKey TranslateKey(string key) => Enum.Parse<ConsoleKey>(key);
