@@ -11,6 +11,9 @@ public static class ImageConverter
         using var bitmap = GetBitmap(svg, width, height);
         using var flippedBitmap = doFlip ? Flip(bitmap) : bitmap;
 
+        using var temp = File.OpenWrite("out.jpg");
+        flippedBitmap.Encode(temp, SKEncodedImageFormat.Jpeg, 100);
+
         return flippedBitmap.Encode(SKEncodedImageFormat.Jpeg, 100).ToArray();
     }
 

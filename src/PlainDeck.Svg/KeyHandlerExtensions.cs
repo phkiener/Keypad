@@ -14,7 +14,7 @@ public static class KeyHandlerExtensions
             doFlip: handler.Configuration.KeyImageFlip));
     }
     
-    public static T WithSvgFrom<T>(this T handler, string resourcePath) where T : KeyHandler
+    public static T WithSvgFromResource<T>(this T handler, string resourcePath) where T : KeyHandler
     {
         var resourceAssembly = Assembly.GetCallingAssembly();
         using var embeddedResource = resourceAssembly.GetManifestResourceStream(resourcePath);
@@ -24,6 +24,15 @@ public static class KeyHandlerExtensions
         }
         
         using var reader = new StreamReader(embeddedResource);
+        var svg = reader.ReadToEnd();
+
+        return handler.WithImage(svg);
+    }
+    
+    public static T WithSvgFromPath<T>(this T handler, string filePath) where T : KeyHandler
+    {
+        using var stream = File.OpenRead(filePath);
+        using var reader = new StreamReader(stream);
         var svg = reader.ReadToEnd();
 
         return handler.WithImage(svg);
