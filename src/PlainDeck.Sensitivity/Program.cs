@@ -22,6 +22,7 @@ internal sealed class BlinkLed : KeyHandler
     public override Task OnKeyDown(IDeviceContext context)
     {
         context.SetStatusLed(255, 255, 255);
+        Console.WriteLine("Blink!");
         
         return Task.CompletedTask;
     }
