@@ -12,4 +12,9 @@ public sealed class StreamDeckXL2022 : DeviceConfiguration
     public override int KeyImageHeight => 96;
     public override bool KeyImageFlip => true;
     public override string KeyImageFormat => "image/jpeg";
+    
+    public override int FullImageWidth => 800;
+    public override int FullImageHeight => 400;
+    public override bool FullImageFlip => true;
+    
 }

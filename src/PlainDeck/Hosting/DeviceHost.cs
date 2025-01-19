@@ -13,7 +13,7 @@ public sealed partial class DeviceHost
 {
     private readonly HidDevice device;
     private readonly DeviceConfiguration configuration;
-    private readonly DeviceContext context;
+    private readonly IDeviceContext context;
     private readonly Channel<DeviceMessage> messageChannel = Channel.CreateUnbounded<DeviceMessage>();
 
     public DeviceHost(HidDevice device, DeviceConfiguration configuration)
