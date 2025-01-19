@@ -8,10 +8,11 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <EmbeddedResource Include="Image.jfif" />
+    <EmbeddedResource Include="*.jpg" />
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\PlainDeck.Svg\PlainDeck.Svg.csproj" />
     <ProjectReference Include="..\PlainDeck\PlainDeck.csproj" />
   </ItemGroup>
 

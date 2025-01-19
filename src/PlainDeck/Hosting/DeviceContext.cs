@@ -24,6 +24,20 @@ public sealed class DeviceContext(HidDevice device, DeviceConfiguration deviceCo
         stream.SetFeature(brightnessRequest);
     }
 
+    public void SetTimeout(short seconds)
+    {
+        var brightnessRequest = new byte[32];
+        brightnessRequest[0] = 0x03;
+        brightnessRequest[1] = 0x0d;
+
+        var timeout = ToLittleEndian(seconds);
+        brightnessRequest[2] = timeout[0];
+        brightnessRequest[3] = timeout[1];
+
+        using var stream = device.Open();
+        stream.SetFeature(brightnessRequest);
+    }
+
     public void SetSensitivity(double percentage)
     {
         if (!Device.HasSensitivity)
@@ -94,9 +108,30 @@ public sealed class DeviceContext(HidDevice device, DeviceConfiguration deviceCo
         }
     }
 
+    public void Sleep()
+    {
+        using var stream = device.Open();
+
+        var message = new byte[32];
+        message[0] = 0x03;
+        message[1] = 0x02;
+
+        stream.SetFeature(message);
+    }
+    public void Wake()
+    {
+        using var stream = device.Open();
+
+        var message = new byte[32];
+        message[0] = 0x03;
+        message[1] = 0x05;
+
+        stream.SetFeature(message);
+    }
+
     /* I got these via wireshark, but something is off here */
 
-    public void SetScreensaver(byte[] imageData)
+    public void SetFullscreenImage(byte[] imageData)
     {
         if (!Device.HasKeyImage)
         {
@@ -157,27 +192,9 @@ public sealed class DeviceContext(HidDevice device, DeviceConfiguration deviceCo
             counter += 1;
         }
     }
-
-    public void Sleep()
-    {
-        using var stream = device.Open();
-
-        var message = new byte[8];
-        message[0] = 0x03;
-        message[1] = 0x02;
-
-        stream.SetFeature(message);
-    }
-    public void Wake()
-    {
-        using var stream = device.Open();
-
-        var message = new byte[8];
-        message[0] = 0x03;
-        message[1] = 0x05;
-
-        stream.SetFeature(message);
-    }
+    
+    // 0x03 0x0d A A ?????
+    // A A: Timeout until screen saver, in seconds, little endian
 
     private static byte[] ToLittleEndian(int value) => [(byte)(value & 0xFF), (byte)((value >> 8) & 0xFF)];
 }
