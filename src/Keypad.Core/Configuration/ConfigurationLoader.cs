@@ -12,8 +12,9 @@ public static class ConfigurationLoader
             return directPath;
         }
 
+        var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         var configDirectory = environment["XDG_CONFIG_HOME"] as string
-                              ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config");
+                              ?? Path.Combine(userProfilePath, ".config");
 
         return Path.Combine(configDirectory, "keypad", "config.json");
     }

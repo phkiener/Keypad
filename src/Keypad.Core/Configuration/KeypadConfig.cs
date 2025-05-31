@@ -43,7 +43,18 @@ public sealed class KeypadKeyConfiguration
 }
 
 [JsonConverter(typeof(KeypadKeyConverter))]
-public readonly record struct KeypadKey();
+public readonly record struct KeypadKey(KeypadKey.Keycode Key)
+{
+    public bool Control { get; init; }
+    public bool Shift { get; init; }
+    public bool Option { get; init; }
+    public bool Command { get; init; }
+    
+    public enum Keycode
+    {
+        A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+    }
+}
 
 [JsonConverter(typeof(KeypadButtonConverter))]
 public readonly record struct KeypadButton(int Row, int Column);
@@ -51,25 +62,6 @@ public readonly record struct KeypadButton(int Row, int Column);
 [JsonConverter(typeof(KeypadImageConverter))]
 public interface KeypadImage
 {
-    public sealed class Color : KeypadImage
-    {
-        public required string Value { get; set; }
-    }
-    
-    public sealed class Text : KeypadImage
-    {
-        public required string Content { get; set; }
-        public required string Foreground { get; set; }
-        public required string Background { get; set; }
-    }
-    
-    public sealed class File : KeypadImage
-    {
-        public required string Path { get; set; }
-    }
-    
-    public sealed class Inline : KeypadImage
-    {
-        public required string SvgContent { get; set; }
-    }
+    public sealed record Color(string Value) : KeypadImage;
+    public sealed record File(string Path) : KeypadImage;
 }
