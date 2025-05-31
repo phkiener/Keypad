@@ -1,10 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>net9.0-macos</TargetFramework>
+    <RuntimeIdentifiers>osx-arm64;osx-x64</RuntimeIdentifiers>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    
+    <ApplicationId>ch.phkiener.keypad</ApplicationId>
+    <ApplicationTitle>Keypad</ApplicationTitle>
+    <ApplicationVersion>$(AssemblyVersion)</ApplicationVersion>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="configuration.local.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Keypad.Core\Keypad.Core.csproj" />
+  </ItemGroup>
   
 </Project>
