@@ -6,16 +6,5 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Swallow.Console.Arguments" Version="0.0.1" />
-    <PackageReference Include="YamlDotNet" Version="16.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PlainDeck\PlainDeck.csproj" />
-    <ProjectReference Include="..\PlainDeck.Key\PlainDeck.Key.csproj" />
-    <ProjectReference Include="..\PlainDeck.Svg\PlainDeck.Svg.csproj" />
-  </ItemGroup>
-
+  
 </Project>
