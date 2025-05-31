@@ -1,4 +1,6 @@
 using Keypad.Configuration;
+using Keypad.Core;
+using Keypad.Core.Device;
 
 namespace Keypad.Tests.Configuration;
 
@@ -30,7 +32,7 @@ public sealed partial class ConfigurationLoaderTest
 
         var parsedConfiguration = await ConfigurationLoader.LoadConfigurationAsync(stream);
         var deviceConfiguration = await Assert.That(parsedConfiguration.Devices).HasSingleItem();
-        await Assert.That(deviceConfiguration?.Type).IsNotNull().IsEqualTo("StreamDeck XL 2022");
+        await Assert.That(deviceConfiguration?.Type).IsNotNull().IsEqualTo(DeviceType.StreamDeckXL2022);
         await Assert.That(deviceConfiguration?.SerialNumber).IsNull();
         await Assert.That(deviceConfiguration?.Brightness).IsNotNull().IsEqualTo(0.7);
         await Assert.That(deviceConfiguration?.Keys).IsNotNull().IsEmpty();
@@ -63,7 +65,7 @@ public sealed partial class ConfigurationLoaderTest
 
         var parsedConfiguration = await ConfigurationLoader.LoadConfigurationAsync(stream);
         var deviceConfiguration = await Assert.That(parsedConfiguration.Devices).HasSingleItem();
-        await Assert.That(deviceConfiguration?.Type).IsNotNull().IsEqualTo("StreamDeck XL 2022");
+        await Assert.That(deviceConfiguration?.Type).IsNotNull().IsEqualTo(DeviceType.StreamDeckXL2022);
         await Assert.That(deviceConfiguration?.SerialNumber).IsNotNull().IsEqualTo("ABCDEFG");
         await Assert.That(deviceConfiguration?.Brightness).IsNotNull().IsEqualTo(0.3);
         await Assert.That(deviceConfiguration?.Keys).IsNotNull().IsEmpty();
@@ -95,7 +97,7 @@ public sealed partial class ConfigurationLoaderTest
 
         await Assert.That(key).IsNotNull();
         await Assert.That(key?.Key).IsNotNull().IsEqualTo(new KeypadKey(KeypadKey.Keycode.A));
-        await Assert.That(key?.Button).IsNotNull().IsEqualTo(new KeypadButton(Row: 2, Column: 3));
+        await Assert.That(key?.Button).IsNotNull().IsEqualTo(new DeviceButton(Row: 2, Column: 3));
         await Assert.That(key?.Image).IsNotNull().IsEqualTo(new KeypadImage.Color("blue"));
     }
     

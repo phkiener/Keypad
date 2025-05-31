@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Keypad.Configuration.Converters;
 
-public sealed partial class KeypadKeyConverter : JsonConverter<KeypadKey>
+internal sealed partial class KeypadKeyConverter : JsonConverter<KeypadKey>
 {
     public override KeypadKey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

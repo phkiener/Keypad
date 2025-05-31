@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Keypad.Configuration.Converters;
 
-public sealed class KeypadImageConverter : JsonConverter<KeypadImage>
+internal sealed class KeypadImageConverter : JsonConverter<KeypadImage>
 {
     public override KeypadImage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -25,7 +25,7 @@ public sealed class KeypadImageConverter : JsonConverter<KeypadImage>
             return new KeypadImage.File(path);
         }
         
-        throw new FormatException($"Invalid image specification '{imageSpecification}'");
+        throw new FormatException($"Invalid image specification '{imageSpecification}'.");
     }
 
     public override void Write(Utf8JsonWriter writer, KeypadImage value, JsonSerializerOptions options)

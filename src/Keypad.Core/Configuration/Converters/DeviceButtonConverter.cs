@@ -1,12 +1,13 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using Keypad.Core;
 
 namespace Keypad.Configuration.Converters;
 
-public sealed partial class KeypadButtonConverter : JsonConverter<KeypadButton>
+internal sealed partial class DeviceButtonConverter : JsonConverter<DeviceButton>
 {
-    public override KeypadButton Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override DeviceButton Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var specification = reader.GetString();
 
@@ -19,10 +20,10 @@ public sealed partial class KeypadButtonConverter : JsonConverter<KeypadButton>
         var row = int.Parse(match.Groups[1].Value);
         var column = int.Parse(match.Groups[2].Value);
 
-        return new KeypadButton(row, column);
+        return new DeviceButton(row, column);
     }
 
-    public override void Write(Utf8JsonWriter writer, KeypadButton value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, DeviceButton value, JsonSerializerOptions options)
     {
         throw new NotSupportedException("This converter is read-only.");
     }
