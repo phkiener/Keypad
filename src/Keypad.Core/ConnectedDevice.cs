@@ -1,4 +1,5 @@
 using HidSharp;
+using Keypad.Core.Device;
 
 namespace Keypad.Core;
 
@@ -20,6 +21,9 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
         this.device = device;
         listeningTask = Task.Run(ListenAsync);
     }
+    
+    public string SerialNumber => device.GetSerialNumber();
+    public DeviceType DeviceType => (DeviceType)device.ProductID;
 
     /// <summary>
     /// Invoked whenever a key is being pressed.
@@ -73,8 +77,8 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     {
         GC.SuppressFinalize(this);
 
-        await listenCancelled.CancelAsync();
-        await listeningTask;
+        await listenCancelled.CancelAsync().ConfigureAwait(false);
+        await listeningTask.ConfigureAwait(false);
     }
 
     private async Task ListenAsync()

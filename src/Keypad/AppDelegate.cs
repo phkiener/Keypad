@@ -1,0 +1,40 @@
+using Keypad.Core;
+using Keypad.Core.Device;
+
+namespace Keypad;
+
+public sealed class AppDelegate : NSApplicationDelegate
+{
+    private ConnectedDevice? device;
+    private NSStatusItem? statusItem;
+
+    public override void DidFinishLaunching(NSNotification notification)
+    {
+        statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(NSStatusItemLength.Square);
+        statusItem.Button.Image = NSImage.GetSystemSymbol("arcade.stick.console", null);
+        
+        statusItem.Menu = new NSMenu();
+        statusItem.Menu.AddItem(new NSMenuItem("Quit", (_, _) => NSApplication.SharedApplication.Stop(this)));
+        
+        device = DeviceManger.Connect(DeviceType.StreamDeckXL2022);
+        if (device is not null)
+        {
+            statusItem.Button.Image = NSImage.GetSystemSymbol("arcade.stick.console.fill", null);
+
+            device.KeyPressed += (_, btn) => Console.WriteLine($"KEYDOWN {btn}");
+            device.KeyReleased += (_, btn) => Console.WriteLine($"KEYUP   {btn}");
+        }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            device?.Dispose();
+            device = null;
+            
+            statusItem?.Dispose();
+            statusItem = null;
+        }
+    }
+}

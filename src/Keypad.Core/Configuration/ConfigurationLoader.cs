@@ -41,7 +41,7 @@ public static class ConfigurationLoader
             throw new NotSupportedException("Cannot read from the given stream.");
         }
         
-        var parsedConfiguration = await JsonSerializer.DeserializeAsync<KeypadConfig>(configStream);
+        var parsedConfiguration = await JsonSerializer.DeserializeAsync<KeypadConfig>(configStream).ConfigureAwait(false);
 
         return parsedConfiguration ?? throw new FormatException("Cannot parse configuration.");
     }

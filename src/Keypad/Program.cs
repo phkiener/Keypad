@@ -1,21 +1,8 @@
-﻿using Keypad.Core;
-using Keypad.Core.Device;
+﻿using Keypad;
 
-await using var device = DeviceManger.Connect(DeviceType.StreamDeckXL2022);
-if (device is null)
-{
-    return 255;
-}
-
-device.KeyPressed  += (_, btn) => Console.WriteLine($"KEYDOWN {btn}");
-device.KeyReleased += (_, btn) => Console.WriteLine($"KEYUP   {btn}");
-
-var cancellation = new CancellationTokenSource();
-Console.CancelKeyPress += (_, _) => cancellation.Cancel();
-
-while (!cancellation.IsCancellationRequested)
-{
-    await Task.Delay(TimeSpan.FromSeconds(5), cancellation.Token);
-}
+NSApplication.Init();
+NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Accessory;
+NSApplication.SharedApplication.Delegate = new AppDelegate();
+NSApplication.SharedApplication.Run();
 
 return 0;
