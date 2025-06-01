@@ -9,7 +9,6 @@ namespace Keypad.Core;
 public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
 {
     private readonly CancellationTokenSource listenCancelled = new();
-    private readonly HidDevice device;
     private readonly Task listeningTask;
     
     /// <summary>
@@ -18,12 +17,12 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     /// <param name="device">The underlying <see cref="HidDevice"/> to connect to</param>
     protected ConnectedDevice(HidDevice device)
     {
-        this.device = device;
+        Device = device;
         listeningTask = Task.Run(ListenAsync);
     }
     
-    public string SerialNumber => device.GetSerialNumber();
-    public DeviceType DeviceType => (DeviceType)device.ProductID;
+    public string SerialNumber => Device.GetSerialNumber();
+    public DeviceType DeviceType => (DeviceType)Device.ProductID;
 
     /// <summary>
     /// Invoked whenever a key is being pressed.
@@ -42,17 +41,18 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     /// <returns><c>true</c> if the brightness was applied, <c>false</c> if the device does not support brightness</returns>
     public virtual bool SetBrightness(double brightness)
     {
-        var value = Math.Clamp(brightness, 0, 1) * 100;
+        return false;
+    }
 
-        var brightnessRequest = new byte[32];
-        brightnessRequest[0] = 0x03;
-        brightnessRequest[1] = 0x08;
-        brightnessRequest[2] = byte.CreateTruncating(value);
-        
-        using var stream = device.Open();
-        stream.SetFeature(brightnessRequest);
-
-        return true;
+    /// <summary>
+    /// Set the image to display on a certain button
+    /// </summary>
+    /// <param name="button">The button whose image to set</param>
+    /// <param name="image">The image to set on the button</param>
+    /// <returns><c>true</c> if the image was applied, <c>false</c> if the device does not support setting button images</returns>
+    public virtual bool SetImage(DeviceButton button, DeviceImage image)
+    {
+        return false;
     }
     
     /// <summary>
@@ -66,6 +66,11 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     /// </summary>
     protected virtual int MessageBufferSize => 1024;
 
+    /// <summary>
+    /// The underlying <see cref="HidDevice"/>
+    /// </summary>
+    protected HidDevice Device { get; }
+    
     /// <summary>
     /// Emit <see cref="KeyPressed"/> for the given button
     /// </summary>
@@ -103,7 +108,7 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
 
     private async Task ListenAsync()
     {
-        await using var readStream = device.Open();
+        await using var readStream = Device.Open();
         readStream.ReadTimeout = Timeout.Infinite;
         
         var readBuffer = new byte[MessageBufferSize];

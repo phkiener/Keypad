@@ -21,8 +21,9 @@ public sealed class AppDelegate : NSApplicationDelegate
         {
             statusItem.Button.Image = NSImage.GetSystemSymbol("arcade.stick.console.fill", null);
 
-            device.KeyPressed += (_, btn) => Console.WriteLine($"KEYDOWN {btn}");
-            device.KeyReleased += (_, btn) => Console.WriteLine($"KEYUP   {btn}");
+            device.SetBrightness(0.5);
+            device.KeyPressed += (_, btn) => device.SetImage(btn, new DeviceImage.Color("white"));
+            device.KeyReleased += (_, btn) => device.SetImage(btn, new DeviceImage.Color("black"));
         }
     }
 
