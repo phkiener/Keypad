@@ -1,12 +1,13 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using Keypad.Core.Abstractions;
 
 namespace Keypad.Configuration.Converters;
 
-internal sealed partial class KeypadKeyConverter : JsonConverter<KeypadKey>
+internal sealed partial class KeypadKeyConverter : JsonConverter<EmulatedKey>
 {
-    public override KeypadKey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override EmulatedKey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var specification = reader.GetString();
 
@@ -32,17 +33,17 @@ internal sealed partial class KeypadKeyConverter : JsonConverter<KeypadKey>
         return key;
     }
 
-    public override void Write(Utf8JsonWriter writer, KeypadKey value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, EmulatedKey value, JsonSerializerOptions options)
     {
         throw new NotSupportedException("This converter is read-only.");
     }
 
-    private static KeypadKey ParseKey(string code)
+    private static EmulatedKey ParseKey(string code)
     {
         if (code is [>= 'A' and <= 'Z'])
         {
-            var keyCode = KeypadKey.Keycode.A + (code[0] - 'A');
-            return new KeypadKey(keyCode);
+            var keyCode = EmulatedKey.Keycode.A + (code[0] - 'A');
+            return new EmulatedKey(keyCode);
         }
 
         throw new FormatException($"Unknown keycode '{code}'.");

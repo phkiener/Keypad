@@ -1,4 +1,5 @@
 using HidSharp;
+using Keypad.Core.Abstractions;
 
 namespace Keypad.Core.Device;
 

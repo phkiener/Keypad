@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using HidSharp;
+using Keypad.Core.Abstractions;
 using Keypad.Core.Device;
 
 namespace Keypad.Core;

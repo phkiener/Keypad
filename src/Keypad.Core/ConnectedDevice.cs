@@ -1,5 +1,5 @@
 using HidSharp;
-using Keypad.Core.Device;
+using Keypad.Core.Abstractions;
 
 namespace Keypad.Core;
 
@@ -34,7 +34,27 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     /// Invoked whenever a key is released.
     /// </summary>
     public event EventHandler<DeviceButton>? KeyReleased;
+    
+    /// <summary>
+    /// Set the brightness for the device
+    /// </summary>
+    /// <param name="brightness">Target brightness; valid range is [0;1]</param>
+    /// <returns><c>true</c> if the brightness was applied, <c>false</c> if the device does not support brightness</returns>
+    public virtual bool SetBrightness(double brightness)
+    {
+        var value = Math.Clamp(brightness, 0, 1) * 100;
 
+        var brightnessRequest = new byte[32];
+        brightnessRequest[0] = 0x03;
+        brightnessRequest[1] = 0x08;
+        brightnessRequest[2] = byte.CreateTruncating(value);
+        
+        using var stream = device.Open();
+        stream.SetFeature(brightnessRequest);
+
+        return true;
+    }
+    
     /// <summary>
     /// Receive a message from the device
     /// </summary>

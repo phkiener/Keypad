@@ -1,11 +1,12 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Keypad.Core.Abstractions;
 
 namespace Keypad.Configuration.Converters;
 
-internal sealed class KeypadImageConverter : JsonConverter<KeypadImage>
+internal sealed class DeviceImageConverter : JsonConverter<DeviceImage>
 {
-    public override KeypadImage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override DeviceImage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var imageSpecification = reader.GetString();
         if (string.IsNullOrWhiteSpace(imageSpecification))
@@ -16,19 +17,19 @@ internal sealed class KeypadImageConverter : JsonConverter<KeypadImage>
         if (imageSpecification.StartsWith("color:"))
         {
             var color = imageSpecification["color:".Length..];
-            return new KeypadImage.Color(color);
+            return new DeviceImage.Color(color);
         }
 
         if (imageSpecification.StartsWith("file:"))
         {
             var path = imageSpecification["file:".Length..];
-            return new KeypadImage.File(path);
+            return new DeviceImage.File(path);
         }
         
         throw new FormatException($"Invalid image specification '{imageSpecification}'.");
     }
 
-    public override void Write(Utf8JsonWriter writer, KeypadImage value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, DeviceImage value, JsonSerializerOptions options)
     {
         throw new NotSupportedException("This converter is read-only.");
     }

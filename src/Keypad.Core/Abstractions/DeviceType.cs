@@ -1,4 +1,4 @@
-namespace Keypad.Core.Device;
+namespace Keypad.Core.Abstractions;
 
 /// <summary>
 /// Describes the kind of StreamDeck device

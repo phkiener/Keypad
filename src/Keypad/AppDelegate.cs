@@ -1,5 +1,5 @@
 using Keypad.Core;
-using Keypad.Core.Device;
+using Keypad.Core.Abstractions;
 
 namespace Keypad;
 

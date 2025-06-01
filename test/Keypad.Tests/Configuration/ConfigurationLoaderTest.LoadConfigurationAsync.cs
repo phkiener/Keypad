@@ -1,6 +1,5 @@
 using Keypad.Configuration;
-using Keypad.Core;
-using Keypad.Core.Device;
+using Keypad.Core.Abstractions;
 
 namespace Keypad.Tests.Configuration;
 
@@ -96,39 +95,39 @@ public sealed partial class ConfigurationLoaderTest
         var key = parsedConfiguration.Devices.ElementAtOrDefault(0)?.Keys.ElementAtOrDefault(0);
 
         await Assert.That(key).IsNotNull();
-        await Assert.That(key?.Key).IsNotNull().IsEqualTo(new KeypadKey(KeypadKey.Keycode.A));
+        await Assert.That(key?.Key).IsNotNull().IsEqualTo(new EmulatedKey(EmulatedKey.Keycode.A));
         await Assert.That(key?.Button).IsNotNull().IsEqualTo(new DeviceButton(Row: 2, Column: 3));
-        await Assert.That(key?.Image).IsNotNull().IsEqualTo(new KeypadImage.Color("blue"));
+        await Assert.That(key?.Image).IsNotNull().IsEqualTo(new DeviceImage.Color("blue"));
     }
     
     [Test]
-    [Arguments("A", KeypadKey.Keycode.A)]
-    [Arguments("B", KeypadKey.Keycode.B)]
-    [Arguments("C", KeypadKey.Keycode.C)]
-    [Arguments("D", KeypadKey.Keycode.D)]
-    [Arguments("E", KeypadKey.Keycode.E)]
-    [Arguments("F", KeypadKey.Keycode.F)]
-    [Arguments("G", KeypadKey.Keycode.G)]
-    [Arguments("H", KeypadKey.Keycode.H)]
-    [Arguments("I", KeypadKey.Keycode.I)]
-    [Arguments("J", KeypadKey.Keycode.J)]
-    [Arguments("K", KeypadKey.Keycode.K)]
-    [Arguments("L", KeypadKey.Keycode.L)]
-    [Arguments("M", KeypadKey.Keycode.M)]
-    [Arguments("N", KeypadKey.Keycode.N)]
-    [Arguments("O", KeypadKey.Keycode.O)]
-    [Arguments("P", KeypadKey.Keycode.P)]
-    [Arguments("Q", KeypadKey.Keycode.Q)]
-    [Arguments("R", KeypadKey.Keycode.R)]
-    [Arguments("S", KeypadKey.Keycode.S)]
-    [Arguments("T", KeypadKey.Keycode.T)]
-    [Arguments("U", KeypadKey.Keycode.U)]
-    [Arguments("V", KeypadKey.Keycode.V)]
-    [Arguments("W", KeypadKey.Keycode.W)]
-    [Arguments("X", KeypadKey.Keycode.X)]
-    [Arguments("Y", KeypadKey.Keycode.Y)]
-    [Arguments("Z", KeypadKey.Keycode.Z)]
-    public async Task ParsesPlainKeyCodes(string givenCode, KeypadKey.Keycode expectedKey)
+    [Arguments("A", EmulatedKey.Keycode.A)]
+    [Arguments("B", EmulatedKey.Keycode.B)]
+    [Arguments("C", EmulatedKey.Keycode.C)]
+    [Arguments("D", EmulatedKey.Keycode.D)]
+    [Arguments("E", EmulatedKey.Keycode.E)]
+    [Arguments("F", EmulatedKey.Keycode.F)]
+    [Arguments("G", EmulatedKey.Keycode.G)]
+    [Arguments("H", EmulatedKey.Keycode.H)]
+    [Arguments("I", EmulatedKey.Keycode.I)]
+    [Arguments("J", EmulatedKey.Keycode.J)]
+    [Arguments("K", EmulatedKey.Keycode.K)]
+    [Arguments("L", EmulatedKey.Keycode.L)]
+    [Arguments("M", EmulatedKey.Keycode.M)]
+    [Arguments("N", EmulatedKey.Keycode.N)]
+    [Arguments("O", EmulatedKey.Keycode.O)]
+    [Arguments("P", EmulatedKey.Keycode.P)]
+    [Arguments("Q", EmulatedKey.Keycode.Q)]
+    [Arguments("R", EmulatedKey.Keycode.R)]
+    [Arguments("S", EmulatedKey.Keycode.S)]
+    [Arguments("T", EmulatedKey.Keycode.T)]
+    [Arguments("U", EmulatedKey.Keycode.U)]
+    [Arguments("V", EmulatedKey.Keycode.V)]
+    [Arguments("W", EmulatedKey.Keycode.W)]
+    [Arguments("X", EmulatedKey.Keycode.X)]
+    [Arguments("Y", EmulatedKey.Keycode.Y)]
+    [Arguments("Z", EmulatedKey.Keycode.Z)]
+    public async Task ParsesPlainKeyCodes(string givenCode, EmulatedKey.Keycode expectedKey)
     {
         await using var stream = BuildConfigFile(
             $$"""
@@ -152,7 +151,7 @@ public sealed partial class ConfigurationLoaderTest
         var key = parsedConfiguration.Devices.ElementAtOrDefault(0)?.Keys.ElementAtOrDefault(0);
 
         await Assert.That(key).IsNotNull();
-        await Assert.That(key?.Key).IsNotNull().IsEqualTo(new KeypadKey(expectedKey));
+        await Assert.That(key?.Key).IsNotNull().IsEqualTo(new EmulatedKey(expectedKey));
     }
     
     [Test]
@@ -180,7 +179,7 @@ public sealed partial class ConfigurationLoaderTest
         var key = parsedConfiguration.Devices.ElementAtOrDefault(0)?.Keys.ElementAtOrDefault(0);
 
         await Assert.That(key).IsNotNull();
-        await Assert.That(key?.Key).IsNotNull().IsEqualTo(new KeypadKey(KeypadKey.Keycode.A) { Shift = true, Command = true, Control = true, Option = true });
+        await Assert.That(key?.Key).IsNotNull().IsEqualTo(new EmulatedKey(EmulatedKey.Keycode.A) { Shift = true, Command = true, Control = true, Option = true });
     }
     
     [Test]
@@ -208,7 +207,7 @@ public sealed partial class ConfigurationLoaderTest
         var key = parsedConfiguration.Devices.ElementAtOrDefault(0)?.Keys.ElementAtOrDefault(0);
 
         await Assert.That(key).IsNotNull();
-        await Assert.That(key?.Image).IsNotNull().IsEqualTo(new KeypadImage.Color("#ffab01"));
+        await Assert.That(key?.Image).IsNotNull().IsEqualTo(new DeviceImage.Color("#ffab01"));
     }
     
     [Test]
@@ -236,6 +235,6 @@ public sealed partial class ConfigurationLoaderTest
         var key = parsedConfiguration.Devices.ElementAtOrDefault(0)?.Keys.ElementAtOrDefault(0);
 
         await Assert.That(key).IsNotNull();
-        await Assert.That(key?.Image).IsNotNull().IsEqualTo(new KeypadImage.File("/some/path/to/image.png"));
+        await Assert.That(key?.Image).IsNotNull().IsEqualTo(new DeviceImage.File("/some/path/to/image.png"));
     }
 }

@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Keypad.Core.Device;
+using Keypad.Core.Abstractions;
 
 namespace Keypad.Configuration.Converters;
 

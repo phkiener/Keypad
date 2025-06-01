@@ -1,4 +1,4 @@
-namespace Keypad.Core;
+namespace Keypad.Core.Abstractions;
 
 /// <summary>
 /// Describes a button on the device

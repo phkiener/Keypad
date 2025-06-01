@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using Keypad.Configuration.Converters;
-using Keypad.Core;
-using Keypad.Core.Device;
+using Keypad.Core.Abstractions;
 
 namespace Keypad.Configuration;
 
@@ -75,67 +74,14 @@ public sealed class KeypadKeyConfiguration
     /// </summary>
     [JsonRequired]
     [JsonPropertyName("key")]
-    public required KeypadKey Key { get; set; }
+    [JsonConverter(typeof(KeypadKeyConverter))]
+    public required EmulatedKey Key { get; set; }
     
     /// <summary>
     /// Image to set for the button on the device
     /// </summary>
     [JsonRequired]
     [JsonPropertyName("image")]
-    public required KeypadImage Image { get; set; }
-}
-
-/// <summary>
-/// An emulated keypress on the host
-/// </summary>
-/// <param name="Key">The <see cref="Keycode"/> that is pressed</param>
-[JsonConverter(typeof(KeypadKeyConverter))]
-public readonly record struct KeypadKey(KeypadKey.Keycode Key)
-{
-    /// <summary>
-    /// Whether the Control modifier should be emitted
-    /// </summary>
-    public bool Control { get; init; }
-    
-    /// <summary>
-    /// Whether the Shift modifier should be emitted
-    /// </summary>
-    public bool Shift { get; init; }
-    
-    /// <summary>
-    /// Whether the Option modifier should be emitted
-    /// </summary>
-    public bool Option { get; init; }
-    
-    /// <summary>
-    /// Whether the Command modifier should be emitted
-    /// </summary>
-    public bool Command { get; init; }
-    
-    /// <summary>
-    /// A keycode to send
-    /// </summary>
-    public enum Keycode
-    {
-        A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
-    }
-}
-
-/// <summary>
-/// Image to set on a device button
-/// </summary>
-[JsonConverter(typeof(KeypadImageConverter))]
-public interface KeypadImage
-{
-    /// <summary>
-    /// Solid color image of a given color
-    /// </summary>
-    /// <param name="Value">The color to set; supported are all valid CSS colors</param>
-    public sealed record Color(string Value) : KeypadImage;
-    
-    /// <summary>
-    /// Image that is loaded from a file
-    /// </summary>
-    /// <param name="Path">Path to the file to load</param>
-    public sealed record File(string Path) : KeypadImage;
+    [JsonConverter(typeof(DeviceImageConverter))]
+    public required DeviceImage Image { get; set; }
 }
