@@ -3,8 +3,8 @@ namespace Keypad.Core.Abstractions;
 /// <summary>
 /// An emulated keypress on the host
 /// </summary>
-/// <param name="Key">The <see cref="Keycode"/> that is pressed</param>
-public readonly record struct EmulatedKey(EmulatedKey.Keycode Key)
+/// <param name="Code">The <see cref="Keycode"/> that is pressed</param>
+public readonly record struct EmulatedKey(EmulatedKey.Keycode Code)
 {
     /// <summary>
     /// Whether the Control modifier should be emitted

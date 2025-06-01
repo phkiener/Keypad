@@ -22,7 +22,7 @@ public sealed class AppDelegate : NSApplicationDelegate
             statusItem.Button.Image = NSImage.GetSystemSymbol("arcade.stick.console.fill", null);
 
             device.SetBrightness(0.5);
-            device.KeyPressed += (_, btn) => device.SetImage(btn, new DeviceImage.Color("white"));
+            device.KeyPressed += (_, _) => SendKey.Press(new EmulatedKey(EmulatedKey.Keycode.A) { Shift = true });
             device.KeyReleased += (_, btn) => device.SetImage(btn, new DeviceImage.Color("black"));
         }
     }
