@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Additional items", "Additio
 		.gitignore = .gitignore
 		LICENSE.txt = LICENSE.txt
 		nuget.config = nuget.config
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{F0A456B8-2133-4C49-9A95-FC14FE8BEDF5}"

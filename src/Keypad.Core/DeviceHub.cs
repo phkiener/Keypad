@@ -4,24 +4,49 @@ using Keypad.Core.Abstractions;
 
 namespace Keypad;
 
+/// <summary>
+/// A hub to manage multiple <see cref="ConnectedDevice"/>s based on a <see cref="KeypadConfig"/>
+/// </summary>
 public sealed class DeviceHub : IDisposable
 {
     private readonly KeypadConfig config;
+    private readonly IKeyEmitter keyEmitter;
     private readonly List<ConnectedDevice> connectedDevices = [];
     private readonly Timer devicePollingTimer;
     
-    public DeviceHub(KeypadConfig config)
+    /// <summary>
+    /// Create a new hub and poll for new devices
+    /// </summary>
+    /// <param name="config">The configuration to use for devices</param>
+    /// <param name="keyEmitter">The <see cref="IKeyEmitter"/> to use for emulating key pressed</param>
+    public DeviceHub(KeypadConfig config, IKeyEmitter keyEmitter)
     {
         this.config = config;
-        devicePollingTimer = new Timer(_ => OnDevicesChanged(this, EventArgs.Empty), null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+        this.keyEmitter = keyEmitter;
+
+        devicePollingTimer = new Timer(
+            callback: _ => OnDevicesChanged(),
+            state: null,
+            dueTime: TimeSpan.Zero,
+            period: TimeSpan.FromSeconds(5));
     }
 
+    /// <summary>
+    /// <c>true</c> if any device is connected
+    /// </summary>
     public bool IsConnected => ConnectedDevices.Any();
+    
+    /// <summary>
+    /// The names of all connected devices, if any
+    /// </summary>
     public IReadOnlyList<string> ConnectedDevices => connectedDevices.Select(d => $"{d.DeviceType}:{d.SerialNumber}").ToList();
 
+    /// <summary>
+    /// A callback that is invoked every time a connection is added or removed
+    /// </summary>
     public EventHandler? OnConnectionsChanged;
 
-    private void OnDevicesChanged(object? sender, EventArgs empty)
+    private void OnDevicesChanged()
     {
         lock (connectedDevices)
         {
@@ -63,50 +88,40 @@ public sealed class DeviceHub : IDisposable
         }
     }
 
-    private void OnKeyPressed(object? sender, DeviceButton e)
+    private EmulatedKey? GetConfiguredKey(object? sender, DeviceButton button)
     {
         if (sender is not ConnectedDevice device)
         {
-            return;
+            return null;
         }
 
         var deviceConfig = config.Devices.SingleOrDefault(d => Matches(device, d));
-        if (deviceConfig is null)
-        {
-            return;
-        }
+        var keyConfiguration = deviceConfig?.Keys.SingleOrDefault(k => k.Button == button);
+        
+        return keyConfiguration?.Key;
+    }
 
-        var keyConfiguration = deviceConfig.Keys.SingleOrDefault(k => k.Button == e);
-        if (keyConfiguration is null)
+    private void OnKeyPressed(object? sender, DeviceButton e)
+    {
+        var key = GetConfiguredKey(sender, e);
+        if (key.HasValue)
         {
-            return;
+            
+            keyEmitter.Press(key.Value);
         }
-
-        SendKey.KeyDown(keyConfiguration.Key);
     }
 
     private void OnKeyReleased(object? sender, DeviceButton e)
     {
-        if (sender is not ConnectedDevice device)
+        var key = GetConfiguredKey(sender, e);
+        if (key.HasValue)
         {
-            return;
+            
+            keyEmitter.Release(key.Value);
         }
-
-        var deviceConfig = config.Devices.SingleOrDefault(d => Matches(device, d));
-        if (deviceConfig is null)
-        {
-            return;
-        }
-
-        var keyConfiguration = deviceConfig.Keys.SingleOrDefault(k => k.Button == e);
-        if (keyConfiguration is null)
-        {
-            return;
-        }
-
-        SendKey.KeyUp(keyConfiguration.Key);
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         devicePollingTimer.Dispose();

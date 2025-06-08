@@ -1,4 +1,4 @@
-# Keypad - Lightweight app for Elgato StreamDeck (and others)
+# Keypad - Lightweight app for Elgato StreamDeck (and other Elgato input devices)
 
 The app will look for its configuration in the following locations, in order:
 
@@ -6,7 +6,9 @@ The app will look for its configuration in the following locations, in order:
 2. `$XDG_CONFIG_HOME/keypad/config.json`
 3. `~/.config/keypad/config.json`
 
-## Button map for StreamDeck XL 2022
+## Supported devices
+
+### StreamDeck XL 2022
 
 ```
 ┌────────────────────────────────────────────┐

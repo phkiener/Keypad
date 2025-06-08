@@ -35,7 +35,8 @@ public sealed class AppDelegate : NSApplicationDelegate
                 }
             ]
         };
-        hub = new DeviceHub(mockConfig);
+
+        hub = new DeviceHub(mockConfig, new SendKey());
         
         UpdateImage();
         UpdateDevices();

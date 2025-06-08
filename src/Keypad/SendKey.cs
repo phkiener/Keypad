@@ -2,23 +2,26 @@ using Keypad.Core.Abstractions;
 
 namespace Keypad;
 
-public static class SendKey
+public sealed class SendKey : IKeyEmitter
 {
-    public static void KeyDown(EmulatedKey key)
+    public void Press(EmulatedKey key)
     {
         using var eventSource = new CGEventSource(CGEventSourceStateID.HidSystem);
         using var keyEvent = new CGEvent(eventSource, key.GetKeyCode(), keyDown: true).SetFlags(key);
         CGEvent.Post(keyEvent, CGEventTapLocation.HID);
     }
 
-    public static void KeyUp(EmulatedKey key)
+    public void Release(EmulatedKey key)
     {
         using var eventSource = new CGEventSource(CGEventSourceStateID.HidSystem);
         using var keyEvent = new CGEvent(eventSource, key.GetKeyCode(), keyDown: false).SetFlags(key);
         CGEvent.Post(keyEvent, CGEventTapLocation.HID);
     }
+}
 
-    private static ushort GetKeyCode(this EmulatedKey key)
+file static class EventExtensions
+{
+    public static ushort GetKeyCode(this EmulatedKey key)
     {
         var platformKey = key.Code switch
         {
@@ -54,7 +57,7 @@ public static class SendKey
         return (ushort)platformKey;
     }
 
-    private static CGEvent SetFlags(this CGEvent keyEvent, EmulatedKey key)
+    public static CGEvent SetFlags(this CGEvent keyEvent, EmulatedKey key)
     {
         if (key.Shift)
         {
