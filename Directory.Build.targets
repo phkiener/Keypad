@@ -1,0 +1,40 @@
+<Project>
+  <ItemGroup>
+    <Compile Update="**/*.*.cs">
+      <DependentUpon>$([System.Text.RegularExpressions.Regex]::Replace('%(Filename)%(Extension)', '\..+\.cs$', '.cs'))</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <PropertyGroup Label="Enable/disable publishing as .zip">
+    <PublishAsZip Condition="$(PublishAsZip) == ''">false</PublishAsZip>
+    <IncludeVersionInZipOutput Condition="$(IncludeVersionInZipOutput) == ''">true</IncludeVersionInZipOutput>
+    <CreatePackage Condition="$(PublishAsZip) == 'true'">false</CreatePackage>
+    <PublishBuildDependsOn Condition="$(PublishAsZip) == 'true'">_BundleApp;_BundleApp;$(PublishBuildDependsOn)</PublishBuildDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Configure .zip publish">
+    <_BundleOutputPath>$(PublishDir)/$(AssemblyName)-$(AssemblyVersion)</_BundleOutputPath>
+    <_ZipOutputPath Condition="$(IncludeVersionInZipOutput) == 'true'">$(PublishDir)/$(AssemblyName)-$(AssemblyVersion).zip</_ZipOutputPath>
+    <_ZipOutputPath Condition="$(IncludeVersionInZipOutput) == 'false'">$(PublishDir)/$(AssemblyName).zip</_ZipOutputPath>
+    <_ChecksumOutputPath Condition="$(_ChecksumOutputPath) == ''">$(_ZipOutputPath)-CHECKSUM</_ChecksumOutputPath>
+  </PropertyGroup>
+
+  <Target Name="_CompressAppBundle" DependsOnTargets="Build;PrepareForPublish" BeforeTargets="Publish" Condition="$(PublishAsZip) == 'true'">
+    <ItemGroup>
+      <_AppBundleFiles Include="$(TargetDir)$(AssemblyName).app/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_AppBundleFiles)" DestinationFolder="$(_BundleOutputPath)/$(AssemblyName).app/%(RecursiveDir)" />
+    <ZipDirectory DestinationFile="$(_ZipOutputPath)" SourceDirectory="$(_BundleOutputPath)" Overwrite="true" />
+    <RemoveDir Directories="$(_BundleOutputPath)" ContinueOnError="true" />
+    <Message Importance="high" Text="Published app to $(_ZipOutputPath)" />
+  </Target>
+
+  <Target Name="_GenerateChecksum" DependsOnTargets="_CompressAppBundle" BeforeTargets="Publish" Condition="$(PublishAsZip) == 'true'">
+    <GetFileHash Files="$(_ZipOutputPath)" Algorithm="SHA256" HashEncoding="hex">
+      <Output TaskParameter="Hash" ItemName="FileHash" />
+    </GetFileHash>
+
+    <WriteLinesToFile File="$(_ChecksumOutputPath)" Lines="@(FileHash)" Overwrite="true" />
+    <Message Importance="high" Text="SHA256 checksum written to $(_ChecksumOutputPath)" />
+  </Target>
+</Project>
