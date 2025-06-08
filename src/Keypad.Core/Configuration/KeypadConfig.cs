@@ -44,6 +44,18 @@ public sealed class KeypadDeviceConfiguration
     /// </summary>
     [JsonPropertyName("brightness")]
     public double Brightness { get; set; } = 0.7;
+
+    /// <summary>
+    /// The sensitivity to set for the keys; defaults to 0.5
+    /// </summary>
+    [JsonPropertyName("sensitivity")]
+    public double Sensitivity { get; set; } = 0.5;
+    
+    /// <summary>
+    /// The color to set for the status LED; defaults to #FFFFFF
+    /// </summary>
+    [JsonPropertyName("color")]
+    public string Color { get; set; } = "#FFFFFF";
     
     /// <summary>
     /// Configurations for the keys on the device
@@ -80,8 +92,7 @@ public sealed class KeypadKeyConfiguration
     /// <summary>
     /// Image to set for the button on the device
     /// </summary>
-    [JsonRequired]
     [JsonPropertyName("image")]
     [JsonConverter(typeof(DeviceImageConverter))]
-    public required DeviceImage Image { get; set; }
+    public DeviceImage? Image { get; set; }
 }

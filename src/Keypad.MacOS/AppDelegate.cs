@@ -3,7 +3,7 @@ using Keypad.Core.Abstractions;
 
 namespace Keypad.MacOS;
 
-public sealed class AppDelegate : NSApplicationDelegate
+public sealed class AppDelegate(KeypadConfig config) : NSApplicationDelegate
 {
     private DeviceHub? hub;
     private NSStatusItem? statusItem;
@@ -15,40 +15,7 @@ public sealed class AppDelegate : NSApplicationDelegate
         statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
         statusItem.Menu.AddItem(new NSMenuItem("Quit", (_, _) => NSApplication.SharedApplication.Stop(this)));
 
-        var mockConfig = new KeypadConfig
-        {
-            Devices =
-            [
-                new KeypadDeviceConfiguration
-                {
-                    Type = DeviceType.StreamDeckXL2022,
-                    Brightness = 0.5,
-                    Keys =
-                    [
-                        new KeypadKeyConfiguration
-                        {
-                            Button = new DeviceButton(1, 1),
-                            Image = new DeviceImage.Color("red"),
-                            Key = new EmulatedKey(EmulatedKey.Keycode.A) { Shift = true }
-                        }
-                    ],
-                },
-                new KeypadDeviceConfiguration()
-                {
-                    Type = DeviceType.StreamDeckPedal,
-                    Keys = [
-                        new KeypadKeyConfiguration
-                        {
-                            Button = new DeviceButton(1, 1),
-                            Image = new DeviceImage.Color("red"),
-                            Key = new EmulatedKey(EmulatedKey.Keycode.B) { Shift = true }
-                        }
-                    ]
-                }
-            ]
-        };
-
-        hub = new DeviceHub(mockConfig, new SendKey());
+        hub = new DeviceHub(config, new SendKey());
         
         UpdateImage();
         UpdateDevices();
