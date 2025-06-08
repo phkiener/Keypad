@@ -2,12 +2,11 @@ using HidSharp;
 
 namespace Keypad.Tests;
 
-public sealed class TestableHidDevice(int vendorId, int productId, string serialNumber) : HidDevice, IDisposable
+public sealed class TestableHidDevice(int vendorId, int productId, string serialNumber) : HidDevice
 {
     private readonly List<byte[]> writtenFeatures = [];
     private readonly List<byte[]> writtenMessages = [];
-    private readonly MemoryStream featureReadStream = new();
-    private readonly MemoryStream contentReadStream = new();
+    private readonly Queue<byte[]> availableMessages = [];
     
     public override int VendorID => vendorId;
     public override int ProductID => productId;
@@ -28,16 +27,17 @@ public sealed class TestableHidDevice(int vendorId, int productId, string serial
 
     public void WriteContent(byte[] buffer)
     {
-        contentReadStream.Write(buffer, 0, buffer.Length);
-        contentReadStream.Position -= buffer.Length;
+        availableMessages.Enqueue(buffer);
     }
-    
-    public void WriteFeature(byte[] buffer)
+
+    public async Task FlushAsync()
     {
-        featureReadStream.Write(buffer, 0, buffer.Length);
-        featureReadStream.Position -= buffer.Length;
+        while (availableMessages.Count > 0)
+        {
+            await Task.Delay(TimeSpan.FromMilliseconds(2));
+        }
     }
-    
+
     protected override DeviceStream OpenDeviceDirectly(OpenConfiguration openConfig)
     {
         return new TestableDeviceStream(device: this, readTimeout: 0, writeTimeout: 0);
@@ -50,7 +50,7 @@ public sealed class TestableHidDevice(int vendorId, int productId, string serial
 
         public override void GetFeature(byte[] buffer, int offset, int count)
         {
-            _ = device.featureReadStream.Read(buffer, offset, count);
+            throw new NotSupportedException();
         }
 
         public override void SetFeature(byte[] buffer, int offset, int count)
@@ -63,7 +63,13 @@ public sealed class TestableHidDevice(int vendorId, int productId, string serial
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            return device.contentReadStream.Read(buffer, offset, count);
+            if (device.availableMessages.TryDequeue(out var readBuffer))
+            {
+                using var memoryBuffer = new MemoryStream(readBuffer);
+                return memoryBuffer.Read(buffer, offset, count);
+            }
+
+            return 0;
         }
 
         public override void Write(byte[] buffer, int offset, int count)
@@ -76,14 +82,6 @@ public sealed class TestableHidDevice(int vendorId, int productId, string serial
         
         public override void Flush()
         {
-            device.featureReadStream.Flush();
-            device.contentReadStream.Flush();
         }
-    }
-
-    public void Dispose()
-    {
-        featureReadStream.Dispose();
-        contentReadStream.Dispose();
     }
 }

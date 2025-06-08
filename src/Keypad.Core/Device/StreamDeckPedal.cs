@@ -57,8 +57,8 @@ public sealed class StreamDeckPedal : ConnectedDevice
     /// <inheritdoc />
     public override bool SetStatusLED(string color)
     {
-        var red = color.StartsWith('#') ? color[1..2] : color[0..1];
-        var green = color.StartsWith('#') ? color[3..4] : color[2..3];
+        var red = color.StartsWith('#') ? color[1..3] : color[0..2];
+        var green = color.StartsWith('#') ? color[3..5] : color[2..4];
         var blue = color.StartsWith('#') ? color[5..6] : color[4..5];
 
         var message = new byte[1024];

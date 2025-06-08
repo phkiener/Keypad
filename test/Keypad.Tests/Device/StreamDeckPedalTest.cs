@@ -56,9 +56,38 @@ public sealed class StreamDeckPedalTest : IDisposable
         await Assert.That(underlyingDevice.WrittenFeatures[4]).Satisfies(static x => x is [0x02, 0x0A, 70, ..]);
     }
 
+    [Test]
+    public async Task ColorIsSet()
+    {
+        streamDeckPedal.SetStatusLED("ffaa00");
+        streamDeckPedal.SetStatusLED("FFAA00");
+        streamDeckPedal.SetStatusLED("#FFAA00");
+        
+        await Assert.That(underlyingDevice.WrittenMessages[0]).Satisfies(static x => x is [0x02, 0x0B, 0xFF, 0xAA, 0x00, 0x02, ..]);
+        await Assert.That(underlyingDevice.WrittenMessages[1]).Satisfies(static x => x is [0x02, 0x0B, 0xFF, 0xAA, 0x00, 0x02, ..]);
+        await Assert.That(underlyingDevice.WrittenMessages[2]).Satisfies(static x => x is [0x02, 0x0B, 0xFF, 0xAA, 0x00, 0x02, ..]);
+    }
+
+    [Test]
+    public async Task ReceivedButtonPress()
+    {
+        var events = new List<string>();
+        streamDeckPedal.KeyPressed += (_, key) => events.Add($"D:{key.Row}-{key.Column}"); 
+        streamDeckPedal.KeyReleased += (_, key) => events.Add($"U:{key.Row}-{key.Column}");
+        
+        underlyingDevice.WriteContent([0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00]);
+        underlyingDevice.WriteContent([0x01, 0x00, 0x03, 0x00, 0x01, 0x01, 0x00, 0x00]);
+        underlyingDevice.WriteContent([0x01, 0x00, 0x03, 0x00, 0x00, 0x01, 0x00, 0x00]);
+        underlyingDevice.WriteContent([0x01, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00]);
+        underlyingDevice.WriteContent([0x01, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00]);
+        underlyingDevice.WriteContent([0x01, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00]);
+        await underlyingDevice.FlushAsync();
+
+        await Assert.That(events).IsEquivalentTo(["D:1-1", "D:1-2", "U:1-1", "U:1-2", "D:1-3", "U:1-3"]);
+    }
+
     public void Dispose()
     {
         streamDeckPedal.Dispose();
-        underlyingDevice.Dispose();
     }
 }
