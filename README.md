@@ -1,4 +1,8 @@
-# Keypad - Lightweight app for Elgato StreamDeck (and other Elgato input devices)
+# Keypad 
+
+A lightweight app for Elgato StreamDeck (and other Elgato input devices).
+
+## Configuration
 
 The app will look for its configuration in the following locations, in order:
 
