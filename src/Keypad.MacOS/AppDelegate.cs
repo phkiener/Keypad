@@ -1,4 +1,5 @@
 using Keypad.Configuration;
+using ServiceManagement;
 
 namespace Keypad.MacOS;
 
@@ -11,7 +12,16 @@ public sealed class AppDelegate(KeypadConfig config) : NSApplicationDelegate
     {
         statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(NSStatusItemLength.Square);
         statusItem.Menu = new NSMenu();
+
         statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
+        statusItem.Menu.AddItem(
+            new NSMenuItem("Launch at login", (sender, _) => ToggleLoginItem(sender))
+            {
+                State = SMAppService.MainApp.Status is SMAppServiceStatus.Enabled
+                    ? NSCellStateValue.On
+                    : NSCellStateValue.Off
+            });
+        
         statusItem.Menu.AddItem(new NSMenuItem("Quit", (_, _) => NSApplication.SharedApplication.Stop(this)));
 
         hub = new DeviceHub(config, new SendKey());
@@ -58,6 +68,24 @@ public sealed class AppDelegate(KeypadConfig config) : NSApplicationDelegate
             {
                 statusItem.Menu.InsertItem(new NSMenuItem("No devices connected"), 0);
             }
+        }
+    }
+
+    private void ToggleLoginItem(object? sender)
+    {
+        var isCurrentlyEnabled = SMAppService.MainApp.Status is SMAppServiceStatus.Enabled;
+        if (isCurrentlyEnabled)
+        {
+            SMAppService.MainApp.Unregister();
+        }
+        else
+        {
+            SMAppService.MainApp.Register();
+        }
+
+        if (sender is NSMenuItem menuItem)
+        {
+            menuItem.State = !isCurrentlyEnabled ? NSCellStateValue.On : NSCellStateValue.Off;
         }
     }
     
