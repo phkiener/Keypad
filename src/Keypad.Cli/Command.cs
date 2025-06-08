@@ -10,7 +10,3 @@ public abstract partial record Command
 
     public abstract int Invoke(ConnectedDevice device);
 }
-
-// timeout x -> set screensaver timeout
-// timeoutimage x -> set image to display as screensaver
-

@@ -42,12 +42,12 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
     /// <inheritdoc />
     public override bool Sleep()
     {
-        var brightnessRequest = new byte[32];
-        brightnessRequest[0] = 0x03;
-        brightnessRequest[1] = 0x02;
+        var request = new byte[32];
+        request[0] = 0x03;
+        request[1] = 0x02;
 
         using var stream = Device.Open();
-        stream.SetFeature(brightnessRequest);
+        stream.SetFeature(request);
 
         return true;
     }
@@ -55,12 +55,12 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
     /// <inheritdoc />
     public override bool Wake()
     {
-        var brightnessRequest = new byte[32];
-        brightnessRequest[0] = 0x03;
-        brightnessRequest[1] = 0x05;
+        var request = new byte[32];
+        request[0] = 0x03;
+        request[1] = 0x05;
 
         using var stream = Device.Open();
-        stream.SetFeature(brightnessRequest);
+        stream.SetFeature(request);
 
         return true;
     }
@@ -70,13 +70,13 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
     {
         var value = Math.Clamp(brightness, 0, 1) * 100;
 
-        var brightnessRequest = new byte[32];
-        brightnessRequest[0] = 0x03;
-        brightnessRequest[1] = 0x08;
-        brightnessRequest[2] = byte.CreateTruncating(value);
+        var request = new byte[32];
+        request[0] = 0x03;
+        request[1] = 0x08;
+        request[2] = byte.CreateTruncating(value);
         
         using var stream = Device.Open();
-        stream.SetFeature(brightnessRequest);
+        stream.SetFeature(request);
 
         return true;
     }
@@ -156,6 +156,64 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
         }
 
         return true;
+    }
+
+    /// <inheritdoc />
+    public override bool SetScreensaver(DeviceImage image, TimeSpan delay)
+    {
+        SetTimeout(delay);
+        SetTimeoutImage(image);
+        
+        return true;
+    }
+
+    private void SetTimeout(TimeSpan delay)
+    {
+        var request = new byte[32];
+        request[0] = 0x03;
+        request[1] = 0x08;
+        
+        var timeoutSeconds = ((short)delay.TotalSeconds).ToLittleEndian();
+        request[2] = timeoutSeconds[0];
+        request[3] = timeoutSeconds[1];
+        
+        using var stream = Device.Open();
+        stream.SetFeature(request);
+    }
+
+    private void SetTimeoutImage(DeviceImage image)
+    {
+        var imageData = ConvertScreenImage(image);
+        
+        const int setImageLength = 1024;
+        const int headerLength = 8;
+        
+        short counter = 0;
+        var index = 0;
+        
+        using var stream = Device.Open();
+        while (index < imageData.Length)
+        {
+            var message = new byte[setImageLength];
+            using var messageStream = new MemoryStream(message);
+            
+            var currentChunk = imageData.Slice(index, Math.Min(imageData.Length - index, setImageLength - headerLength));
+            short chunkSize = (short)currentChunk.Length;
+            
+            messageStream.WriteByte(0x02);
+            messageStream.WriteByte(0x09);
+            messageStream.WriteByte(0x08);
+            messageStream.WriteByte(index + chunkSize + 1 >= imageData.Length ? (byte)0x01 : (byte)0x00);
+
+            messageStream.Write(chunkSize.ToLittleEndian());
+            messageStream.Write(counter.ToLittleEndian());
+            messageStream.Write(currentChunk);
+            
+            stream.Write(message);
+
+            counter += 1;
+            index += currentChunk.Length;
+        }
     }
 
     /// <inheritdoc />

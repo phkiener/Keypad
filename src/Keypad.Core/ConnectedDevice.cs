@@ -86,9 +86,20 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     /// <summary>
     /// Set an image for the whole screen of the device
     /// </summary>
-    /// <param name="image">The image to set on the button</param>
+    /// <param name="image">The image to set on the device</param>
     /// <returns><c>true</c> if the image was applied, <c>false</c> if the device does not support setting screen images</returns>
     public virtual bool SetImage(DeviceImage image)
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Set an image as screensaver
+    /// </summary>
+    /// <param name="image">The image to set as screensaver</param>
+    /// <param name="delay">Delay after which to show the screen saver</param>
+    /// <returns><c>true</c> if the image was applied, <c>false</c> if the device does not support setting a screensaver</returns>
+    public virtual bool SetScreensaver(DeviceImage image, TimeSpan delay)
     {
         return false;
     }
