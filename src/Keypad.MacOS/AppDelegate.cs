@@ -1,5 +1,4 @@
 using Keypad.Configuration;
-using Keypad.Core.Abstractions;
 
 namespace Keypad.MacOS;
 
