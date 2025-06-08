@@ -4,20 +4,14 @@ namespace Keypad;
 
 public static class SendKey
 {
-    public static void Press(EmulatedKey key)
-    {
-        KeyDown(key);
-        KeyUp(key);
-    }
-
-    private static void KeyDown(EmulatedKey key)
+    public static void KeyDown(EmulatedKey key)
     {
         using var eventSource = new CGEventSource(CGEventSourceStateID.HidSystem);
         using var keyEvent = new CGEvent(eventSource, key.GetKeyCode(), keyDown: true).SetFlags(key);
         CGEvent.Post(keyEvent, CGEventTapLocation.HID);
     }
 
-    private static void KeyUp(EmulatedKey key)
+    public static void KeyUp(EmulatedKey key)
     {
         using var eventSource = new CGEventSource(CGEventSourceStateID.HidSystem);
         using var keyEvent = new CGEvent(eventSource, key.GetKeyCode(), keyDown: false).SetFlags(key);

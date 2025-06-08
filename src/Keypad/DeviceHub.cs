@@ -75,8 +75,14 @@ public sealed class DeviceHub : IDisposable
         {
             return;
         }
-        
-        Console.WriteLine($"{device.DeviceType}:{device.SerialNumber} pressed {e}");
+
+        var keyConfiguration = deviceConfig.Keys.SingleOrDefault(k => k.Button == e);
+        if (keyConfiguration is null)
+        {
+            return;
+        }
+
+        SendKey.KeyDown(keyConfiguration.Key);
     }
 
     private void OnKeyReleased(object? sender, DeviceButton e)
@@ -92,7 +98,13 @@ public sealed class DeviceHub : IDisposable
             return;
         }
 
-        Console.WriteLine($"{device.DeviceType}:{device.SerialNumber} released {e}");
+        var keyConfiguration = deviceConfig.Keys.SingleOrDefault(k => k.Button == e);
+        if (keyConfiguration is null)
+        {
+            return;
+        }
+
+        SendKey.KeyUp(keyConfiguration.Key);
     }
 
     public void Dispose()

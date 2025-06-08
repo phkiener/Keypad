@@ -14,8 +14,28 @@ public sealed class AppDelegate : NSApplicationDelegate
         statusItem.Menu = new NSMenu();
         statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
         statusItem.Menu.AddItem(new NSMenuItem("Quit", (_, _) => NSApplication.SharedApplication.Stop(this)));
-        
-        hub = new DeviceHub(new KeypadConfig { Devices = [new KeypadDeviceConfiguration { Type = DeviceType.StreamDeckXL2022, Keys = [], Brightness = 0.5 }] });
+
+        var mockConfig = new KeypadConfig
+        {
+            Devices =
+            [
+                new KeypadDeviceConfiguration
+                {
+                    Type = DeviceType.StreamDeckXL2022,
+                    Brightness = 0.5,
+                    Keys =
+                    [
+                        new KeypadKeyConfiguration
+                        {
+                            Button = new DeviceButton(1, 1),
+                            Image = new DeviceImage.Color("red"),
+                            Key = new EmulatedKey(EmulatedKey.Keycode.A) { Shift = true }
+                        }
+                    ],
+                }
+            ]
+        };
+        hub = new DeviceHub(mockConfig);
         
         UpdateImage();
         UpdateDevices();
