@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="TUnit" Version="0.23.0" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.2" />
   </ItemGroup>
   
   <ItemGroup>
