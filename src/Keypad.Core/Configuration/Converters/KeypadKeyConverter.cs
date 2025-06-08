@@ -46,6 +46,24 @@ internal sealed partial class KeypadKeyConverter : JsonConverter<EmulatedKey>
             return new EmulatedKey(keyCode);
         }
 
+        if (code is [>= '0' and <= '9'])
+        {
+            var keyCode = EmulatedKey.Keycode.Key0 + (code[0] - '0');
+            return new EmulatedKey(keyCode);
+        }
+
+        if (code is ['F',  ..var remainder] && remainder is [>= '1' and <= '9'] or [>= '0' and <= '2', >= '0' and <= '9'])
+        {
+            var keyCode = EmulatedKey.Keycode.F1 + (int.Parse(remainder) - 1);
+            return new EmulatedKey(keyCode);
+        }
+
+        if (code is ['N', 'u', 'm', >= '0' and <= '9'])
+        {
+            var keyCode = EmulatedKey.Keycode.Num0 + (code[3] - '0');
+            return new EmulatedKey(keyCode);
+        }
+
         throw new FormatException($"Unknown keycode '{code}'.");
     }
 
