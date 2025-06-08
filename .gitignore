@@ -1,6 +1,7 @@
 # Build output
 [bB]in/
 [oO]bj/
+[pP]ublish/
 
 # IDEs
 .idea/
