@@ -43,6 +43,24 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     /// Invoked whenever a key is released.
     /// </summary>
     public event EventHandler<DeviceButton>? KeyReleased;
+
+    /// <summary>
+    /// Put the device to sleep
+    /// </summary>
+    /// <returns><c>true</c> if the device has been put to sleep, <c>false</c> if the device does not support sleeping</returns>
+    public virtual bool Sleep()
+    {
+        return false;
+    }
+    
+    /// <summary>
+    /// Wake the device from sleep
+    /// </summary>
+    /// <returns><c>true</c> if the device was awoken from sleep, <c>false</c> if the device does not support sleeping</returns>
+    public virtual bool Wake()
+    {
+        return false;
+    }
     
     /// <summary>
     /// Set the brightness for the device
@@ -61,6 +79,16 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     /// <param name="image">The image to set on the button</param>
     /// <returns><c>true</c> if the image was applied, <c>false</c> if the device does not support setting button images</returns>
     public virtual bool SetImage(DeviceButton button, DeviceImage image)
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Set an image for the whole screen of the device
+    /// </summary>
+    /// <param name="image">The image to set on the button</param>
+    /// <returns><c>true</c> if the image was applied, <c>false</c> if the device does not support setting screen images</returns>
+    public virtual bool SetImage(DeviceImage image)
     {
         return false;
     }
