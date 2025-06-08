@@ -86,7 +86,7 @@ public sealed class KeypadKeyConfiguration
     /// </summary>
     [JsonRequired]
     [JsonPropertyName("key")]
-    [JsonConverter(typeof(KeypadKeyConverter))]
+    [JsonConverter(typeof(EmulatedKeyConverter))]
     public required EmulatedKey Key { get; set; }
     
     /// <summary>

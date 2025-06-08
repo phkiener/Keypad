@@ -28,6 +28,6 @@ internal sealed partial class DeviceButtonConverter : JsonConverter<DeviceButton
         throw new NotSupportedException("This converter is read-only.");
     }
 
-    [GeneratedRegex(@"^(\d);(\d)$")]
+    [GeneratedRegex("^([1-8]);([1-8])$")]
     private static partial Regex SpecificationRegex();
 }

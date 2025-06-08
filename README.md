@@ -56,7 +56,7 @@ e.g. `"Shift+Ctrl+L"` or `"Cmd+Option+S"`. Supported modifiers are:
 The supported keycodes are:
 
 - letters A to Z
-- digits 0 to 9 (as Key0, Key1, ...)
+- digits 0 to 9
 - numpad keys 0 to 9 (as Num0, Num1, ...)
 - F1 to F20
 

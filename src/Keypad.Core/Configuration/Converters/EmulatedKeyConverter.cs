@@ -5,7 +5,7 @@ using Keypad.Core.Abstractions;
 
 namespace Keypad.Configuration.Converters;
 
-internal sealed partial class KeypadKeyConverter : JsonConverter<EmulatedKey>
+internal sealed partial class EmulatedKeyConverter : JsonConverter<EmulatedKey>
 {
     public override EmulatedKey Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
