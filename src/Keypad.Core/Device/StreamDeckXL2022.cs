@@ -11,10 +11,16 @@ namespace Keypad.Core.Device;
 /// </summary>
 public sealed class StreamDeckXL2022 : ConnectedDevice
 {
+    /// <inheritdoc />
     protected override int Rows => 4;
+    
+    /// <inheritdoc />
     protected override int Columns => 8;
 
+    /// <inheritdoc />
     protected override Dictionary<byte, DeviceButton> ButtonIndex { get; } = new();
+    
+    /// <inheritdoc />
     protected override Dictionary<DeviceButton, ButtonState> Keymap { get; }
     
     internal StreamDeckXL2022(HidDevice device) : base(device)

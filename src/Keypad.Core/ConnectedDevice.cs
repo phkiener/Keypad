@@ -91,6 +91,25 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     {
         return false;
     }
+    
+    /// <summary>
+    /// Set the sensitivity for the buttons
+    /// </summary>
+    /// <returns><c>true</c> if the sensitivity was applied, <c>false</c> if the device does not support setting sensitivity</returns>
+    public virtual bool SetSensitivity(double sensitivity)
+    {
+        return false;
+    }
+    
+    /// <summary>
+    /// Set the color for the status LED
+    /// </summary>
+    /// <param name="color">The color to set as RRGGBB-hexcode (i.e. <c>FFAB01</c></param>
+    /// <returns><c>true</c> if the color was applied, <c>false</c> if the device does not have a status LED</returns>
+    public virtual bool SetStatusLED(string color)
+    {
+        return false;
+    }
 
     /// <summary>
     /// Set the image to display on a certain button
