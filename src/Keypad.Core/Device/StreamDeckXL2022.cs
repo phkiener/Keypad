@@ -263,7 +263,7 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
         const int imageHeight = 600;
 
         using var bitmap = ImageLoader.Load(image, imageWidth, imageHeight);
-        using var flippedBitmap = bitmap.Flip(horizontal: false, vertical: true);
+        using var flippedBitmap = bitmap.Flip(horizontal: true, vertical: true);
         
         return flippedBitmap.Encode(SKEncodedImageFormat.Jpeg, 100).ToArray();
     }
