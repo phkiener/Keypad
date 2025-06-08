@@ -1,0 +1,40 @@
+name: Build app bundle
+
+on:
+  release:
+    types: [created]
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: 1
+
+jobs:
+  build:
+    runs-on: macos-15
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use XCode 16.3
+        run: sudo xcode-select -switch /Applications/Xcode_16.3.app
+
+      - name: Install dotnet workload to compile for macOS
+        run: dotnet workload install macos
+
+      - name: Restore NuGet packages
+        run: dotnet restore
+
+      - name: Publish app bundle
+        run: dotnet publish --configuration Release --no-restore -p:AssemblyVersion=${{ github.ref_name }} -o publish/ src/Keypad.MacOS
+
+      - name: Upload bundle to release
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631
+        with:
+          files: |
+            publish/Keypad-${{ github.ref_name }}.zip
+            publish/Keypad-${{ github.ref_name }}.zip-CHECKSUM
+
+      - name: Show checksum for release
+        run: cat publish/Keypad-${{ github.ref_name }}.zip-CHECKSUM
