@@ -35,7 +35,10 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
     {
         keymap = buttonIndex.Values.ToDictionary(static key => key, static _ => ButtonState.Up);
     }
-    
+
+    /// <inheritdoc />
+    public override IEnumerable<DeviceButton> Buttons => buttonIndex.Values;
+
     /// <inheritdoc />
     public override bool SetBrightness(double brightness)
     {

@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using HidSharp;
 using Keypad.Core.Abstractions;
 using Keypad.Core.Device;
@@ -8,7 +7,7 @@ namespace Keypad.Core;
 /// <summary>
 /// Helper to connect to StreamDeck devices
 /// </summary>
-public static class DeviceManger
+public static class DeviceManager
 {
     private const int vendorId = 0x0FD9;
 
@@ -33,16 +32,13 @@ public static class DeviceManger
         };
     }
 
-#pragma warning disable CA2255 // Provide a "wrapper" for DeviceList.Local.Changed so that consumers don't need to work with HidSharp directly
-    [ModuleInitializer]
-    internal static void ConnectCallback()
-    {
-        DeviceList.Local.Changed += (sender, _) => AvailableDevicesChanged?.Invoke(sender, EventArgs.Empty);
-    }
-#pragma warning restore CA2255
-    
     /// <summary>
-    /// Invoked whenever a USB-device connects or disconnects
+    /// Checks if the given device is connected
     /// </summary>
-    public static event EventHandler? AvailableDevicesChanged; 
+    /// <param name="device">The device whose connection to check</param>
+    /// <returns><c>true</c> if the device is still connected, <c>false</c> otherwise</returns>
+    public static bool IsConnected(ConnectedDevice device)
+    {
+        return DeviceList.Local.GetHidDeviceOrNull(vendorId, (int)device.DeviceType, serialNumber: device.SerialNumber) is not null;
+    }
 }

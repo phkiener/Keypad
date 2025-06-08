@@ -21,8 +21,18 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
         listeningTask = Task.Run(ListenAsync);
     }
     
+    /// <summary>
+    /// The serial number of the device
+    /// </summary>
     public string SerialNumber => Device.GetSerialNumber();
+    
+    /// <summary>
+    /// <see cref="DeviceType"/> of the device
+    /// </summary>
     public DeviceType DeviceType => (DeviceType)Device.ProductID;
+    
+    /// All buttons that are present on the device
+    public abstract IEnumerable<DeviceButton> Buttons { get; }
 
     /// <summary>
     /// Invoked whenever a key is being pressed.

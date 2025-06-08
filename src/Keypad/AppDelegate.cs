@@ -1,38 +1,73 @@
-using Keypad.Core;
+using Keypad.Configuration;
 using Keypad.Core.Abstractions;
 
 namespace Keypad;
 
 public sealed class AppDelegate : NSApplicationDelegate
 {
-    private ConnectedDevice? device;
+    private DeviceHub? hub;
     private NSStatusItem? statusItem;
 
     public override void DidFinishLaunching(NSNotification notification)
     {
         statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(NSStatusItemLength.Square);
-        statusItem.Button.Image = NSImage.GetSystemSymbol("arcade.stick.console", null);
-        
         statusItem.Menu = new NSMenu();
+        statusItem.Menu.AddItem(NSMenuItem.SeparatorItem);
         statusItem.Menu.AddItem(new NSMenuItem("Quit", (_, _) => NSApplication.SharedApplication.Stop(this)));
         
-        device = DeviceManger.Connect(DeviceType.StreamDeckXL2022);
-        if (device is not null)
-        {
-            statusItem.Button.Image = NSImage.GetSystemSymbol("arcade.stick.console.fill", null);
+        hub = new DeviceHub(new KeypadConfig { Devices = [new KeypadDeviceConfiguration { Type = DeviceType.StreamDeckXL2022, Keys = [], Brightness = 0.5 }] });
+        
+        UpdateImage();
+        UpdateDevices();
+        hub.OnConnectionsChanged += OnConnectionsChanged;
+    }
 
-            device.SetBrightness(0.5);
-            device.KeyPressed += (_, _) => SendKey.Press(new EmulatedKey(EmulatedKey.Keycode.A) { Shift = true });
-            device.KeyReleased += (_, btn) => device.SetImage(btn, new DeviceImage.Color("black"));
+    private void OnConnectionsChanged(object? sender, EventArgs args)
+    {
+        InvokeOnMainThread(UpdateImage);
+        InvokeOnMainThread(UpdateDevices);
+    }
+
+    private void UpdateImage()
+    {
+        if (statusItem is not null && hub is not null)
+        {
+            statusItem.Button.Image = hub.IsConnected
+                ? NSImage.GetSystemSymbol("arcade.stick.console.fill", null)
+                : NSImage.GetSystemSymbol("arcade.stick.console", null);
         }
     }
 
+    private void UpdateDevices()
+    {
+        if (statusItem?.Menu is not null && hub is not null)
+        {
+            var previousDevices = statusItem.Menu.Items.TakeWhile(static i => !i.IsSeparatorItem).ToList();
+            foreach (var device in previousDevices)
+            {
+                statusItem.Menu.RemoveItem(device);
+            }
+
+            if (hub.ConnectedDevices.Any())
+            {
+                foreach (var device in hub.ConnectedDevices.OrderByDescending(static d => d))
+                {
+                    statusItem.Menu.InsertItem(new NSMenuItem(device), 0);
+                }
+            }
+            else
+            {
+                statusItem.Menu.InsertItem(new NSMenuItem("No devices connected"), 0);
+            }
+        }
+    }
+    
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            device?.Dispose();
-            device = null;
+            hub?.Dispose();
+            hub = null;
             
             statusItem?.Dispose();
             statusItem = null;
