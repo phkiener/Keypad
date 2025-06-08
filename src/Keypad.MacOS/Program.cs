@@ -1,4 +1,4 @@
-﻿using Keypad;
+﻿using Keypad.MacOS;
 
 NSApplication.Init();
 NSApplication.SharedApplication.ActivationPolicy = NSApplicationActivationPolicy.Accessory;

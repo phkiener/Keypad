@@ -4,6 +4,7 @@
     <TargetFramework>net9.0-macos</TargetFramework>
     <RuntimeIdentifiers>osx-arm64;osx-x64</RuntimeIdentifiers>
     <OutputType>Exe</OutputType>
+    <AssemblyName>Keypad</AssemblyName>
 
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>

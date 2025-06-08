@@ -1,6 +1,6 @@
 using Keypad.Core.Abstractions;
 
-namespace Keypad;
+namespace Keypad.MacOS;
 
 public sealed class SendKey : IKeyEmitter
 {
