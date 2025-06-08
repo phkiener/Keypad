@@ -1,5 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using System.Xml;
 using Keypad.Core.Abstractions;
 using SkiaSharp;
