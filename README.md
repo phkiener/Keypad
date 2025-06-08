@@ -1,12 +1,32 @@
+[![Install via Homebrew](https://img.shields.io/badge/homebrew-phkiener%2Fpersonal%2Fkeypad-orange?style=for-the-badge)](https://github.com/phkiener/homebrew-personal/blob/main/Casks/keypad.rb)
+&nbsp;
+![X-Clacks-Overhead "GNU Terry Pratchett"](https://img.shields.io/badge/this%20is-a%20badge!-blue?style=for-the-badge)
+
+---
+
 # Keypad 
 
 A lightweight app for Elgato StreamDeck (and other Elgato input devices).
+
+## Installation
+
+Either download the latest [GitHub Release](https://github.com/phkiener/Keypad/releases/) and extract the `.app` bundle yourself
+... or use homebrew!
+
+```sh
+brew install phkiener/personal/keypad
+```
+
+## Companion CLI
+
 Next to the main app (running in the status bar), there is a companion-CLI app
 to control a few settings on your device(s):
 
 - Setting a screensaver
 - Sleep and awaken from sleep
 - Setting a fullscreen image
+
+This CLI is (as of now) only available by building the source yourself.
 
 ## Configuration
 
@@ -18,6 +38,10 @@ The app will look for its configuration in the following locations, in order:
 
 If no file exists at any of these locations, an empty configuration will be
 used. So be sure to you create the configuration file yourself!
+
+Note that the app is most likely started via `launchtl`, so if you do want to
+set environment variables, make sure they're set for `launchtl` and not just in
+your shell profile.
 
 ### Configuration format
 
