@@ -12,6 +12,26 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     private readonly Task listeningTask;
     
     /// <summary>
+    /// How many rows of buttons there are
+    /// </summary>
+    protected abstract int Rows { get; }
+    
+    /// <summary>
+    /// How many columns of buttons there are
+    /// </summary>
+    protected abstract int Columns { get; }
+
+    /// <summary>
+    /// A dictionary that maps a button's index to a <see cref="DeviceButton"/>
+    /// </summary>
+    protected abstract Dictionary<byte, DeviceButton> ButtonIndex { get; }
+    
+    /// <summary>
+    /// A dictionary containing the <see cref="ButtonState"/> for each <see cref="DeviceButton"/>
+    /// </summary>
+    protected abstract Dictionary<DeviceButton, ButtonState> Keymap { get; }
+
+    /// <summary>
     /// Instantiate the <see cref="ConnectedDevice"/> and begin listening
     /// </summary>
     /// <param name="device">The underlying <see cref="HidDevice"/> to connect to</param>
@@ -32,7 +52,7 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     public DeviceType DeviceType => (DeviceType)Device.ProductID;
     
     /// All buttons that are present on the device
-    public abstract IEnumerable<DeviceButton> Buttons { get; }
+    public IEnumerable<DeviceButton> Buttons => ButtonIndex.Values;
 
     /// <summary>
     /// Invoked whenever a key is being pressed.
@@ -103,12 +123,39 @@ public abstract class ConnectedDevice : IDisposable, IAsyncDisposable
     {
         return false;
     }
-    
+
     /// <summary>
     /// Receive a message from the device
     /// </summary>
     /// <param name="payload">The received payload</param>
-    protected abstract void OnMessageReceived(ReadOnlySpan<byte> payload);
+    protected virtual void OnMessageReceived(ReadOnlySpan<byte> payload)
+    {
+        if (payload is [0x01, 0x00, var length, 0x00, ..] && length == Rows * Columns)
+        {
+            for (byte i = 0; i < Rows * Columns; i++)
+            {
+                var buttonState = (ButtonState)payload[4 + i];
+                var deviceButton = ButtonIndex[i];
+                
+                var currentState = Keymap[deviceButton];
+                if (currentState == buttonState)
+                {
+                    continue;
+                }
+
+                Keymap[deviceButton] = buttonState;
+                if (buttonState is ButtonState.Down)
+                {
+                    OnKeyPressed(deviceButton);
+                }
+
+                if (buttonState is ButtonState.Up)
+                {
+                    OnKeyReleased(deviceButton);
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Size of the message buffer; this should be big enough to fit all expected messages received from the device

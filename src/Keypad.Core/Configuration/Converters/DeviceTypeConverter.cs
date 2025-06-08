@@ -13,6 +13,7 @@ internal sealed class DeviceTypeConverter : JsonConverter<DeviceType>
         return type switch
         {
             "StreamDeck XL 2022" or "StreamDeckXL2022" or "XL2022" => DeviceType.StreamDeckXL2022,
+            "StreamDeck Pedal" or "StreamDeckPedal" or "Pedal" => DeviceType.StreamDeckPedal,
             _ => throw new FormatException($"Unknown device type: '{type}'.")
         };
     }

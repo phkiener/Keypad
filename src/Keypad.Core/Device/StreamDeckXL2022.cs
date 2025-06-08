@@ -11,13 +11,13 @@ namespace Keypad.Core.Device;
 /// </summary>
 public sealed class StreamDeckXL2022 : ConnectedDevice
 {
-    private static readonly Dictionary<byte, DeviceButton> buttonIndex = new();
-    private const int Rows = 4;
-    private const int Columns = 8;
-    
-    private readonly Dictionary<DeviceButton, ButtonState> keymap;
+    protected override int Rows => 4;
+    protected override int Columns => 8;
 
-    static StreamDeckXL2022()
+    protected override Dictionary<byte, DeviceButton> ButtonIndex { get; } = new();
+    protected override Dictionary<DeviceButton, ButtonState> Keymap { get; }
+    
+    internal StreamDeckXL2022(HidDevice device) : base(device)
     {
         for (int row = 0; row < Rows; row++)
         {
@@ -26,18 +26,12 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
                 var button = new DeviceButton(row + 1, column + 1);
                 var buttonId = row * Columns + column;
                 
-                buttonIndex.Add(byte.CreateChecked(buttonId), button);
+                ButtonIndex.Add(byte.CreateChecked(buttonId), button);
             }
         }
+        
+        Keymap = ButtonIndex.Values.ToDictionary(static key => key, static _ => ButtonState.Up);
     }
-    
-    internal StreamDeckXL2022(HidDevice device) : base(device)
-    {
-        keymap = buttonIndex.Values.ToDictionary(static key => key, static _ => ButtonState.Up);
-    }
-
-    /// <inheritdoc />
-    public override IEnumerable<DeviceButton> Buttons => buttonIndex.Values;
 
     /// <inheritdoc />
     public override bool Sleep()
@@ -84,7 +78,7 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
     /// <inheritdoc />
     public override bool SetImage(DeviceButton button, DeviceImage image)
     {
-        var buttonId = buttonIndex.SingleOrDefault(b => b.Value == button).Key;
+        var buttonId = ButtonIndex.SingleOrDefault(b => b.Value == button).Key;
         var imageData = ConvertButtonImage(image);
 
         const int setImageLength = 1024;
@@ -213,36 +207,6 @@ public sealed class StreamDeckXL2022 : ConnectedDevice
 
             counter += 1;
             index += currentChunk.Length;
-        }
-    }
-
-    /// <inheritdoc />
-    protected override void OnMessageReceived(ReadOnlySpan<byte> payload)
-    {
-        if (payload is [0x01, 0x00, 0x20, 0x00, ..] && payload.Length >= 4 + Rows * Columns)
-        {
-            for (byte i = 0; i < Rows * Columns; i++)
-            {
-                var buttonState = (ButtonState)payload[4 + i];
-                var deviceButton = buttonIndex[i];
-                
-                var currentState = keymap[deviceButton];
-                if (currentState == buttonState)
-                {
-                    continue;
-                }
-
-                keymap[deviceButton] = buttonState;
-                if (buttonState is ButtonState.Down)
-                {
-                    OnKeyPressed(deviceButton);
-                }
-
-                if (buttonState is ButtonState.Up)
-                {
-                    OnKeyReleased(deviceButton);
-                }
-            }
         }
     }
 

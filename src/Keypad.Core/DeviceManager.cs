@@ -28,6 +28,7 @@ public static class DeviceManager
         return device.ProductID switch
         {
             (int)DeviceType.StreamDeckXL2022 => new StreamDeckXL2022(device),
+            (int)DeviceType.StreamDeckPedal => new StreamDeckPedal(device),
             _ => null
         };
     }

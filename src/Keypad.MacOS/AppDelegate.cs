@@ -32,6 +32,18 @@ public sealed class AppDelegate : NSApplicationDelegate
                             Key = new EmulatedKey(EmulatedKey.Keycode.A) { Shift = true }
                         }
                     ],
+                },
+                new KeypadDeviceConfiguration()
+                {
+                    Type = DeviceType.StreamDeckPedal,
+                    Keys = [
+                        new KeypadKeyConfiguration
+                        {
+                            Button = new DeviceButton(1, 1),
+                            Image = new DeviceImage.Color("red"),
+                            Key = new EmulatedKey(EmulatedKey.Keycode.B) { Shift = true }
+                        }
+                    ]
                 }
             ]
         };
