@@ -73,6 +73,9 @@ public sealed class DeviceHub : IDisposable
                     OnConnectionsChanged?.Invoke(this, EventArgs.Empty);
 
                     device.SetBrightness(targetDevice.Brightness);
+                    device.SetSensitivity(targetDevice.Sensitivity);
+                    device.SetStatusLED(targetDevice.Color);
+
                     foreach (var button in device.Buttons)
                     {
                         var image = targetDevice.Keys.SingleOrDefault(k => k.Button == button)?.Image

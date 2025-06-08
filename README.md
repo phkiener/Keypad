@@ -1,6 +1,12 @@
 # Keypad 
 
 A lightweight app for Elgato StreamDeck (and other Elgato input devices).
+Next to the main app (running in the status bar), there is a companion-CLI app
+to control a few settings on your device(s):
+
+- Setting a screensaver
+- Sleep and awaken from sleep
+- Setting a fullscreen image
 
 ## Configuration
 
